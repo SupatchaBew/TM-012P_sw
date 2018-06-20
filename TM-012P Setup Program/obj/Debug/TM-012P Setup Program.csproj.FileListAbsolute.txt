@@ -1,0 +1,20 @@
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.exe.config
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.exe
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.pdb
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM_012P_Setup_Program.Form1.resources
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM_012P_Setup_Program.Properties.Resources.resources
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.GenerateResource.cache
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.exe
+C:\Users\Administrator\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.pdb
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.exe.config
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.exe
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.pdb
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csprojAssemblyReference.cache
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM_012P_Setup_Program.Form1.resources
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM_012P_Setup_Program.Properties.Resources.resources
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.GenerateResource.cache
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.CoreCompileInputs.cache
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.exe
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.pdb
