@@ -11,8 +11,35 @@ namespace Modbus_Poll_CS
     {
         private SerialPort sp = new SerialPort();
         public string modbusStatus;
+        int pulltime = 500;
 
+        // ------------------------------------------------------------------------
+        /// <summary>Constant for exception illegal function.</summary>
+        public const byte excIllegalFunction = 1;
+        /// <summary>Constant for exception illegal data address.</summary>
+        public const byte excIllegalDataAdr = 2;
+        /// <summary>Constant for exception illegal data value.</summary>
+        public const byte excIllegalDataVal = 3;
+        /// <summary>Constant for exception slave device failure.</summary>
+        public const byte excSlaveDeviceFailure = 4;
+        /// <summary>Constant for exception acknowledge.</summary>
+        public const byte excAck = 5;
+        /// <summary>Constant for exception slave is busy/booting up.</summary>
+        public const byte excSlaveIsBusy = 6;
+        /// <summary>Constant for exception gate path unavailable.</summary>
+        public const byte excGatePathUnavailable = 10;
+        /// <summary>Constant for exception not connected.</summary>
+        public const byte excExceptionNotConnected = 253;
+        /// <summary>Constant for exception connection lost.</summary>
+        public const byte excExceptionConnectionLost = 254;
+        /// <summary>Constant for exception response timeout.</summary>
+        public const byte excExceptionTimeout = 255;
+        /// <summary>Constant for exception wrong offset.</summary>
+        private const byte excExceptionOffset = 128;
+        /// <summary>Constant for exception send failt.</summary>
+        private const byte excSendFailt = 100;
 
+        // ------------------------------------------------------------------------
         #region Constructor / Deconstructor
         public modbus()
         {
@@ -35,8 +62,8 @@ namespace Modbus_Poll_CS
                 sp.Parity = parity;
                 sp.StopBits = stopBits;
                 //These timeouts are default and cannot be editted through the class at this point:
-                sp.ReadTimeout = 200;
-                sp.WriteTimeout = 200;
+                sp.ReadTimeout = 5000;
+                sp.WriteTimeout = 5000;
 
                 try
                 {
@@ -144,6 +171,7 @@ namespace Modbus_Poll_CS
         #region Get Response
         private void GetResponse(ref byte[] response)
         {
+            Thread.Sleep(pulltime);
             //There is a bug in .Net 2.0 DataReceived Event that prevents people from using this
             //event as an interrupt to handle data (it doesn't fire all of the time).  Therefore
             //we have to use the ReadByte command for a fixed length as it's been shown to be reliable.
@@ -151,6 +179,27 @@ namespace Modbus_Poll_CS
             {
                 response[i] = (byte)(sp.ReadByte());
             }
+        }
+        #endregion
+
+        #region Check Exception
+        private void MBmaster_OnException(byte exception)
+        {
+            string exc = "Modbus says error: ";
+            switch (exception)
+            {
+                case modbus.excIllegalFunction: exc += "Illegal function!"; break;
+                case modbus.excIllegalDataAdr: exc += "Illegal data adress!"; break;
+                case modbus.excIllegalDataVal: exc += "Illegal data value!"; break;
+                case modbus.excSlaveDeviceFailure: exc += "Slave device failure!"; break;
+                case modbus.excAck: exc += "Acknoledge!"; break;
+                case modbus.excGatePathUnavailable: exc += "Gateway path unavailbale!"; break;
+                case modbus.excExceptionTimeout: exc += "Slave timed out!"; break;
+                case modbus.excExceptionConnectionLost: exc += "Connection is lost!"; break;
+                case modbus.excExceptionNotConnected: exc += "Not connected!"; break;
+            }
+
+            MessageBox.Show(exc, "Modbus slave exception");
         }
         #endregion
 
@@ -234,15 +283,34 @@ namespace Modbus_Poll_CS
                 }
                 catch (Exception err)
                 {
-                    modbusStatus = "Error in write event: " + err.Message;
-                    MessageBox.Show($"Error in read event: + {err.Message}");
-                    return false;
+                    // Response data is slave exception
+                    if ((response != null) && (response[1] > excExceptionOffset))
+                    {
+                        response[1] -= excExceptionOffset;
+                        MBmaster_OnException(response[2]);
+                        return false;
+                    }
+                    else
+                    {
+                        modbusStatus = "Error in write event: " + err.Message;
+                        MessageBox.Show($"Error in read event: + {err.Message}");
+                        return false;
+                    }
+
                 }
                 //Evaluate message:
                 if (CheckResponse(response))
                 {
-                    modbusStatus = "Write successful";
-                    return true;
+                    // Response data is regular data
+                    if (response != null)
+                    {
+                        modbusStatus = "Write successful";
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
@@ -364,5 +432,7 @@ namespace Modbus_Poll_CS
 
         }
         #endregion
+
+
     }
 }
