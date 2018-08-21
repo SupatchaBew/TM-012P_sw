@@ -18,8 +18,6 @@ C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\De
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.CoreCompileInputs.cache
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.exe
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.pdb
-C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\CircularProgressBar.dll
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\WinFormAnimation.dll
-C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\CircularProgressBar.xml
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\WinFormAnimation.xml
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.CopyComplete

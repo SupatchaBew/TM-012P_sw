@@ -38,11 +38,11 @@ namespace TM_012P_Setup_Program
         short pvadjselect;
         short pvfilselect;
         short cfselect;
-        short sllselect;
-        short slhselect;
+        int sllselect;
+        int slhselect;
         short invselect;
-        short inlselect;
-        short inhselect;
+        int inlselect;
+        int inhselect;
         short defaultset;
 
         bool input_change = false;
@@ -108,7 +108,7 @@ namespace TM_012P_Setup_Program
             input_type[5] = "TC-S";
             input_type[6] = "TC-E";
             input_type[7] = "PT100";
-            input_type[8] = "Resistor";
+            input_type[8] = "5K\u2126";
             inputBox.Items.AddRange(input_type);
             //initial input setting limit
             sllnumud.Maximum = 9999.9M;
@@ -158,6 +158,7 @@ namespace TM_012P_Setup_Program
                         pvLabel.ForeColor = Color.Turquoise;
                         outputLabel.ForeColor = Color.LightBlue;
                         cojLabel.ForeColor = Color.Turquoise;
+                        deviceBox.Enabled = false;
                         _connected = true;
                         threadstart();
                         Verifyuser_config();
@@ -185,7 +186,7 @@ namespace TM_012P_Setup_Program
                     pvLabel.ForeColor = Color.DarkGray;
                     outputLabel.ForeColor = Color.DarkGray;
                     cojLabel.ForeColor = Color.DarkGray;
-                    
+                    deviceBox.Enabled = true;
                 }
                 else
                 {
@@ -279,14 +280,20 @@ namespace TM_012P_Setup_Program
                     switch (br.ReadInt32())
                     {
                         case 0:
-                            deg_crdb.Checked = true;
-                            inunitLabel.Text = "°C";
-                            mb.SendFc6(1, 8, 0);
+                            if (device_model == 0)
+                            {
+                                deg_crdb.Checked = true;
+                                inunitLabel.Text = "°C";
+                                mb.SendFc6(1, 8, 0);
+                            }
                             break;
                         case 1:
-                            deg_frdb.Checked = true;
-                            inunitLabel.Text = "°F";
-                            mb.SendFc6(1, 8, 1);
+                            if (device_model == 0)
+                            {
+                                deg_frdb.Checked = true;
+                                inunitLabel.Text = "°F";
+                                mb.SendFc6(1, 8, 1);
+                            }
                             break;
                     }
                     pvgainselect = (short)(br.ReadInt32());
@@ -299,8 +306,8 @@ namespace TM_012P_Setup_Program
                     pvfilnumud.Value = br.ReadInt32();
                     mb.SendFc6(1, 7, (short)pvfilnumud.Value);
 
-                    sllselect = (short)br.ReadInt32();
-                    slhselect = (short)br.ReadInt32();
+                    sllselect = (int)br.ReadInt32();
+                    slhselect = (int)br.ReadInt32();
                     if (device_model == 1)
                     {                        
                         sllnumud.Value = sllselect;
@@ -317,11 +324,11 @@ namespace TM_012P_Setup_Program
                         slhnumud.Value = slhselect / 10.0M;
                         mb.SendFc6(1, 9, slhselect);
                     }
-                    inlselect = (short)br.ReadInt32();
+                    inlselect = (int)br.ReadInt32();
                     inlnumud.Value = inlselect / 100.0M;
                     mb.SendFc6(1, 13, inlselect);
 
-                    inhselect = (short)br.ReadInt32();
+                    inhselect = (int)br.ReadInt32();
                     inhnumud.Value = inhselect / 100.0M;
                     mb.SendFc6(1, 12, inhselect);
                     switch (br.ReadInt32())
@@ -380,7 +387,14 @@ namespace TM_012P_Setup_Program
                 }
                 else
                 {
-                    bw.Write(Convert.ToInt32(1));
+                    if(device_model == 0)
+                    {
+                        bw.Write(Convert.ToInt32(1));
+                    }
+                    else
+                    {
+                        bw.Write(Convert.ToInt32(0));
+                    }
                 }
                 bw.Write(Convert.ToInt32(pvgainnumud.Value * 100.00M));
                 bw.Write(Convert.ToInt32(pvadjnumud.Value * 10.0M));
@@ -423,25 +437,32 @@ namespace TM_012P_Setup_Program
             Thread read_device_Thread = new Thread(new ThreadStart(Read_device_Thread));
             if (connected)
             {
-                Disable_event();
-                mb.SendFc4(1, 265, 1, ref values);
-                switch (values[0])
+                try
                 {
-                    default:
-                    case 0:
-                        prodIDLabel.Text = "TM-012P-TC";
-                        device_model = 0;
-                        break;
-                    case 1:
-                        prodIDLabel.Text = "TM-012P-R";
-                        device_model = 1;
-                        break;
+                    Disable_event();
+                    mb.SendFc4(1, 265, 1, ref values);
+                    switch (values[0])
+                    {
+                        default:
+                        case 0:
+                            prodIDLabel.Text = "TM-012P-TC";
+                            device_model = 0;
+                            break;
+                        case 1:
+                            prodIDLabel.Text = "TM-012P-R";
+                            device_model = 1;
+                            break;
+                    }
+                    mb.SendFc4(1, 0, 16, ref values);
+                    SetText(values);
+                    Enable_event();
+                    //Thread.Sleep(200);
+                    read_device_Thread.Start();
                 }
-                mb.SendFc4(1, 0, 16, ref values);
-                SetText(values);
-                Enable_event();
-                //Thread.Sleep(200);
-                read_device_Thread.Start();
+                catch
+                {
+                    MessageBox.Show("Can not connect device", "Problem with device connecting");
+                }
             }
             else
             {
@@ -500,66 +521,91 @@ namespace TM_012P_Setup_Program
                     }
                 }
                 this.outputLabel.Text = (((float)values[2]) / 100.00).ToString("0.00");
-                this.cojLabel.Text = (((float)values[4]) / 10.0).ToString("0.0");
-
-
+                if(device_model == 0)
+                {
+                    this.cojLabel.Text = (((float)values[4]) / 10.0).ToString("0.0");
+                }
+                else
+                {
+                    this.cojLabel.Text = "---";
+                }
             }
         }
         private void SetText(short[] values)
         {
-            inputBox.SelectedIndex = values[3];
-            this.pvgainnumud.Value = (decimal)values[5]/100.00M;
-            this.pvadjnumud.Value = (decimal)values[6]/10.0M;
-            this.pvfilnumud.Value = values[7];
-            switch (values[8])
+            try
             {
-                default:
-                case 0:
-                    this.deg_crdb.Checked = true;
-                    this.inunitLabel.Text = "°C";
-                    break;
-                case 1:
-                    this.deg_frdb.Checked = true;
-                    this.inunitLabel.Text = "°F";
-                    break;
-            }
-            slh = values[9];
-            sll = values[10];
-            if(device_model == 1)
-            {
-                this.slhnumud.Value = (decimal)slh;
-                this.slhvalueLabel.Text = slh.ToString("0.0");
-                this.sllnumud.Value = (decimal)sll;
-                this.sllvalueLabel.Text = sll.ToString("0.0");
-            }
-            else
-            {
-                this.slhnumud.Value = (decimal)slh / 10.0M;
-                this.slhvalueLabel.Text = (slh / 10.0).ToString("0.0");
-                this.sllnumud.Value = (decimal)sll / 10.0M;
-                this.sllvalueLabel.Text = (sll / 10.0).ToString("0.0");
-            }
+                Select_input_unit();
+                inputBox.SelectedIndex = values[3];
+                this.pvgainnumud.Value = (decimal)values[5] / 100.00M;
+                this.pvadjnumud.Value = (decimal)values[6] / 10.0M;
+                this.pvfilnumud.Value = values[7];
+                switch (device_model)
+                {
+                    default:
+                    case 0:
+                        switch (values[8])
+                        {
+                            default:
+                            case 0:
+                                this.deg_crdb.Checked = true;
+                                this.inunitLabel.Text = "°C";
+                                break;
+                            case 1:
+                                this.deg_frdb.Checked = true;
+                                this.inunitLabel.Text = "°F";
+                                break;
+                        }
+                        inputBox.Enabled = true;
+                        panel6.Enabled = true;
+                        break;
+                    case 1:
+                        inputBox.Enabled = false;
+                        this.inunitLabel.Text = "\u2126";
+                        panel6.Enabled = false;
+                        break;
+                }
+                slh = values[9];
+                sll = values[10];
+                if (device_model == 1)
+                {
+                    this.slhnumud.Value = (decimal)slh;
+                    this.slhvalueLabel.Text = slh.ToString("0.0");
+                    this.sllnumud.Value = (decimal)sll;
+                    this.sllvalueLabel.Text = sll.ToString("0.0");
+                }
+                else
+                {
+                    this.slhnumud.Value = (decimal)slh / 10.0M;
+                    this.slhvalueLabel.Text = (slh / 10.0).ToString("0.0");
+                    this.sllnumud.Value = (decimal)sll / 10.0M;
+                    this.sllvalueLabel.Text = (sll / 10.0).ToString("0.0");
+                }
 
-            inv = values[11];
-            switch (inv)
-            {
-                case 0:
-                    this.noninvertrdb.Checked = true;
-                    this.polarityLabel.Text = "Non-inverting";
-                    break;
-                case 1:
-                    this.invertrdb.Checked = true;
-                    this.polarityLabel.Text = "Inverting";
-                    break;
+                inv = values[11];
+                switch (inv)
+                {
+                    case 0:
+                        this.noninvertrdb.Checked = true;
+                        this.polarityLabel.Text = "Non-inverting";
+                        break;
+                    case 1:
+                        this.invertrdb.Checked = true;
+                        this.polarityLabel.Text = "Inverting";
+                        break;
+                }
+                inh = values[12];
+                inl = values[13];
+                this.inhnumud.Value = (decimal)inh / 100.0M;
+                this.inhvalueLabel.Text = (inh / 100.00).ToString("0.00");
+                this.inlnumud.Value = (decimal)inl / 100.0M;
+                this.inlvalueLabel.Text = (inl / 100.00).ToString("0.00");
+                this.swLabel.Text = (values[14] / 100.00M).ToString("0.00");
             }
-            inh = values[12];
-            inl = values[13];          
-            this.inhnumud.Value = (decimal)inh / 100.0M;
-            this.inhvalueLabel.Text = (inh / 100.00).ToString("0.00");
-            this.inlnumud.Value = (decimal)inl / 100.0M;
-            this.inlvalueLabel.Text = (inl / 100.00).ToString("0.00");
-            this.swLabel.Text = (values[14]/100.00M).ToString("0.00");
-
+            catch
+            {
+                MessageBox.Show("Can not read modbus register", "Communication problem");
+            }
         }
         #endregion
 
@@ -656,22 +702,22 @@ namespace TM_012P_Setup_Program
                     {
                         if(device_model == 1)
                         {
-                            mb.SendFc6(1, 10, (short)Settings.Default.sll);
+                            mb.SendFc6(1, 10, (int)Settings.Default.sll);
                         }
                         else
                         {
-                            mb.SendFc6(1, 10, (short)(Settings.Default.sll * 10.0M));
+                            mb.SendFc6(1, 10, (int)(Settings.Default.sll * 10.0M));
                         }
                     }
                     if (Settings.Default.slh != slhnumud.Value)
                     {
                         if (device_model == 1)
                         {
-                            mb.SendFc6(1, 9, (short)Settings.Default.slh);
+                            mb.SendFc6(1, 9, (int)Settings.Default.slh);
                         }
                         else
                         {
-                            mb.SendFc6(1, 9, (short)(Settings.Default.slh * 10.0M));
+                            mb.SendFc6(1, 9, (int)(Settings.Default.slh * 10.0M));
                         }
                     }
                     if (Settings.Default.inv != _invrbt)
@@ -680,11 +726,11 @@ namespace TM_012P_Setup_Program
                     }
                     if (Settings.Default.inl != inlnumud.Value)
                     {
-                        mb.SendFc6(1, 13, (short)(Settings.Default.inl*100.0M));
+                        mb.SendFc6(1, 13, (int)(Settings.Default.inl*100.0M));
                     }
                     if (Settings.Default.inh != inhnumud.Value)
                     {
-                        mb.SendFc6(1, 12, (short)(Settings.Default.inh*100.0M));
+                        mb.SendFc6(1, 12, (int)(Settings.Default.inh*100.0M));
                     }
                     configloadprgbar.Increment(25);
                     mb.SendFc4(1, 0, 16, ref values);
@@ -705,86 +751,94 @@ namespace TM_012P_Setup_Program
         #region setting box change value -->> send modbus function6
         private void inputBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            //Select_input_unit();
+            Select_input_unit();
             inputselect = (short)inputBox.SelectedIndex;
             input_change = true;
         }
         private void Select_input_unit()
         {
-            ///re-init sll, slh, 
-            if (deg_crdb.Checked && !deg_frdb.Checked)
+            if(device_model == 1)
             {
-                switch (inputBox.SelectedIndex)
-                {
-                    case 0: //tc-k
-                        UpdatesettingLimit(-200.0M, 1372.0M);
-                        break;
-                    case 1: //tc-j
-                        UpdatesettingLimit(-200.0M, 1200.0M);
-                        break;
-                    case 2: //tc-n
-                        UpdatesettingLimit(-200.0M, 1300.0M);
-                        break;
-                    case 3: //tc-e
-                        UpdatesettingLimit(-200.0M, 1000.0M);
-                        break;
-                    case 4: //tc-t
-                        UpdatesettingLimit(-200.0M, 400.0M);
-                        break;
-                    case 5: //tc-r
-                        UpdatesettingLimit(-50.0M, 1768.0M);
-                        break;
-                    case 6: //tc-s
-                        UpdatesettingLimit(-50.0M, 1768.0M);
-                        break;
-                    case 7: // pt-100
-                        UpdatesettingLimit(-200.0M, 850.0M);
-                        break;
-                    default:
-                        break;
-                }
+                UpdatesettingLimit(0.0M, 5000.0M);
             }
             else
             {
-                switch (inputBox.SelectedIndex)
+                ///re-init sll, slh, 
+                if (deg_crdb.Checked && !deg_frdb.Checked)
                 {
-                    case 0: //tc-k
-                        UpdatesettingLimit(-328.0M, 2501.6M);
-                        break;
-                    case 1: //tc-j
-                        UpdatesettingLimit(-328.0M, 2192.0M);
-                        break;
-                    case 2: //tc-n
-                        UpdatesettingLimit(-328.0M, 2372.0M);
-                        break;
-                    case 3: //tc-e
-                        UpdatesettingLimit(-328.0M, 1832.0M);
-                        break;
-                    case 4: //tc-t
-                        UpdatesettingLimit(-328.0M, 752.0M);
-                        break;
-                    case 5: //tc-r
-                        UpdatesettingLimit(-58.0M, 3214.4M);
-                        break;
-                    case 6: //tc-s
-                        UpdatesettingLimit(-58.0M, 3214.4M);
-                        break;
-                    case 7: // pt-100
-                        UpdatesettingLimit(-328.0M, 1562.0M);
-                        break;
-                    default:
-                        break;
+                    switch (inputBox.SelectedIndex)
+                    {
+                        case 0: //tc-k
+                            UpdatesettingLimit(-200.0M, 1372.0M);
+                            break;
+                        case 1: //tc-j
+                            UpdatesettingLimit(-200.0M, 1200.0M);
+                            break;
+                        case 2: //tc-n
+                            UpdatesettingLimit(-200.0M, 1300.0M);
+                            break;
+                        case 3: //tc-e
+                            UpdatesettingLimit(-200.0M, 1000.0M);
+                            break;
+                        case 4: //tc-t
+                            UpdatesettingLimit(-200.0M, 400.0M);
+                            break;
+                        case 5: //tc-r
+                            UpdatesettingLimit(-50.0M, 1768.0M);
+                            break;
+                        case 6: //tc-s
+                            UpdatesettingLimit(-50.0M, 1768.0M);
+                            break;
+                        case 7: // pt-100
+                            UpdatesettingLimit(-200.0M, 850.0M);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (inputBox.SelectedIndex)
+                    {
+                        case 0: //tc-k
+                            UpdatesettingLimit(-328.0M, 2501.6M);
+                            break;
+                        case 1: //tc-j
+                            UpdatesettingLimit(-328.0M, 2192.0M);
+                            break;
+                        case 2: //tc-n
+                            UpdatesettingLimit(-328.0M, 2372.0M);
+                            break;
+                        case 3: //tc-e
+                            UpdatesettingLimit(-328.0M, 1832.0M);
+                            break;
+                        case 4: //tc-t
+                            UpdatesettingLimit(-328.0M, 752.0M);
+                            break;
+                        case 5: //tc-r
+                            UpdatesettingLimit(-58.0M, 3214.4M);
+                            break;
+                        case 6: //tc-s
+                            UpdatesettingLimit(-58.0M, 3214.4M);
+                            break;
+                        case 7: // pt-100
+                            UpdatesettingLimit(-328.0M, 1562.0M);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+ 
         }
         private void UpdatesettingLimit(decimal min, decimal max)
         {
             sll_max = max;
             sll_min = min;
-            sllnumud.Value = min;
+            //sllnumud.Value = min;
             slh_max = max;
             slh_min = min;
-            slhnumud.Value = max;
+            //slhnumud.Value = max;
         }
         private void pvgainnumud_ValueChanged(object sender, EventArgs e)
         {
@@ -820,13 +874,27 @@ namespace TM_012P_Setup_Program
 
         private void sllnumud_ValueChanged(object sender, EventArgs e)
         {
-            sllselect = (short)(sllnumud.Value*10);
+            if(device_model == 1)
+            {
+                sllselect = (int)(sllnumud.Value);
+            }
+            else
+            {
+                sllselect = (int)(sllnumud.Value * 10);
+            }
             sll_change = true;
         }
 
         private void slhnumud_ValueChanged(object sender, EventArgs e)
         {
-            slhselect = (short)(slhnumud.Value * 10);
+            if (device_model == 1)
+            {
+                slhselect = (int)(slhnumud.Value);
+            }
+            else
+            {
+                slhselect = (int)(slhnumud.Value * 10);
+            }
             slh_change = true;
         }
 
@@ -845,13 +913,13 @@ namespace TM_012P_Setup_Program
 
         private void inlnumud_ValueChanged(object sender, EventArgs e)
         {
-            inlselect = (short)(inlnumud.Value*100);
+            inlselect = (int)(inlnumud.Value*100);
             inl_change = true;
         }
 
         private void inhnumud_ValueChanged(object sender, EventArgs e)
         {
-            inhselect = (short)(inhnumud.Value*100);
+            inhselect = (int)(inhnumud.Value*100);
             inh_change = true;
         }
         #endregion
@@ -907,7 +975,7 @@ namespace TM_012P_Setup_Program
                     }
                     else
                     {
-                        MessageBox.Show("Selected Input type is incorrect, Please Select again");
+                        MessageBox.Show("Selected Input type is incorrect, Please Select again", "Wrong type of selected input");
                     }
                     input_change = false;
                 }
@@ -952,15 +1020,18 @@ namespace TM_012P_Setup_Program
                 }
                 if(cf_change)
                 {
-                    mb.SendFc6(1, 8, cfselect);
-                    if(cfselect == 1)
+                    if(device_model == 0)
                     {
-                        actionTextBox.Text += "changing degree C to F \r\n";
-                    }
-                    else
-                    {
-                        actionTextBox.Text += "changing degree F to C \r\n";
-                    }                 
+                        mb.SendFc6(1, 8, cfselect);
+                        if (cfselect == 1)
+                        {
+                            actionTextBox.Text += "changing degree C to F \r\n";
+                        }
+                        else
+                        {
+                            actionTextBox.Text += "changing degree F to C \r\n";
+                        }
+                    }               
                     cf_change = false;
                 }
                 if(sll_change || slh_change)

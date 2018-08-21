@@ -13,6 +13,7 @@ Please find to-do lists as below
 - nice pop-up warining
 - check language correctiveness
 - when select wrong device serial port
+- load config device with diffent model
 
 
 Done fixing bug

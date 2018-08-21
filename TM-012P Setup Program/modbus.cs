@@ -137,7 +137,7 @@ namespace Modbus_Poll_CS
         #endregion
 
         #region Build Message
-        private void BuildMessage(byte address, byte type, ushort start, short registers, ref byte[] message)
+        private void BuildMessage(byte address, byte type, ushort start, int registers, ref byte[] message)
         {
             //Array to receive CRC bytes:
             byte[] CRC = new byte[2];
@@ -259,7 +259,7 @@ namespace Modbus_Poll_CS
         }
         #endregion
         #region Function 6 - Write single Registers
-        public bool SendFc6(byte address, ushort start, short values)
+        public bool SendFc6(byte address, ushort start, int values)
         {
             //Ensure port is open:
             if (sp.IsOpen)

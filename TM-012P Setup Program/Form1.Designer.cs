@@ -237,7 +237,7 @@
             // 
             this.swLabel.AutoSize = true;
             this.swLabel.ForeColor = System.Drawing.Color.Turquoise;
-            this.swLabel.Location = new System.Drawing.Point(100, 23);
+            this.swLabel.Location = new System.Drawing.Point(99, 23);
             this.swLabel.Name = "swLabel";
             this.swLabel.Size = new System.Drawing.Size(0, 17);
             this.swLabel.TabIndex = 5;
@@ -400,7 +400,7 @@
             this.inputsettlp.ColumnCount = 3;
             this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.40239F));
             this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.59761F));
-            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 78F));
             this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -419,8 +419,8 @@
             this.inputsettlp.RowCount = 4;
             this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.69388F));
             this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65.30612F));
-            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.inputsettlp.Size = new System.Drawing.Size(285, 95);
@@ -429,7 +429,7 @@
             // inputBox
             // 
             this.inputBox.FormattingEnabled = true;
-            this.inputBox.Location = new System.Drawing.Point(4, 19);
+            this.inputBox.Location = new System.Drawing.Point(4, 21);
             this.inputBox.Margin = new System.Windows.Forms.Padding(4);
             this.inputBox.Name = "inputBox";
             this.inputBox.Size = new System.Drawing.Size(89, 24);
@@ -440,10 +440,10 @@
             // 
             this.degreeLabel.AutoSize = true;
             this.degreeLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.degreeLabel.Location = new System.Drawing.Point(101, 0);
+            this.degreeLabel.Location = new System.Drawing.Point(106, 0);
             this.degreeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.degreeLabel.Name = "degreeLabel";
-            this.degreeLabel.Size = new System.Drawing.Size(65, 15);
+            this.degreeLabel.Size = new System.Drawing.Size(65, 17);
             this.degreeLabel.TabIndex = 11;
             this.degreeLabel.Text = "UNIT (Degree)";
             // 
@@ -451,9 +451,9 @@
             // 
             this.panel6.Controls.Add(this.deg_crdb);
             this.panel6.Controls.Add(this.deg_frdb);
-            this.panel6.Location = new System.Drawing.Point(100, 18);
+            this.panel6.Location = new System.Drawing.Point(105, 20);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(94, 23);
+            this.panel6.Size = new System.Drawing.Size(98, 23);
             this.panel6.TabIndex = 34;
             // 
             // deg_crdb
@@ -481,7 +481,7 @@
             this.deg_frdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.DarkSlateGray;
             this.deg_frdb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Cyan;
             this.deg_frdb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.deg_frdb.Location = new System.Drawing.Point(59, 4);
+            this.deg_frdb.Location = new System.Drawing.Point(56, 4);
             this.deg_frdb.Margin = new System.Windows.Forms.Padding(4);
             this.deg_frdb.Name = "deg_frdb";
             this.deg_frdb.Size = new System.Drawing.Size(43, 21);
@@ -494,7 +494,7 @@
             // 
             this.pvgainLabel.AutoSize = true;
             this.pvgainLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pvgainLabel.Location = new System.Drawing.Point(4, 44);
+            this.pvgainLabel.Location = new System.Drawing.Point(4, 48);
             this.pvgainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pvgainLabel.Name = "pvgainLabel";
             this.pvgainLabel.Size = new System.Drawing.Size(60, 17);
@@ -510,7 +510,7 @@
             0,
             0,
             131072});
-            this.pvgainnumud.Location = new System.Drawing.Point(3, 65);
+            this.pvgainnumud.Location = new System.Drawing.Point(3, 68);
             this.pvgainnumud.Maximum = new decimal(new int[] {
             999,
             0,
@@ -530,7 +530,7 @@
             // 
             this.pvadjnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pvadjnumud.DecimalPlaces = 1;
-            this.pvadjnumud.Location = new System.Drawing.Point(100, 65);
+            this.pvadjnumud.Location = new System.Drawing.Point(105, 68);
             this.pvadjnumud.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -550,7 +550,7 @@
             // 
             this.pvadjLabel.AutoSize = true;
             this.pvadjLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pvadjLabel.Location = new System.Drawing.Point(101, 44);
+            this.pvadjLabel.Location = new System.Drawing.Point(106, 48);
             this.pvadjLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pvadjLabel.Name = "pvadjLabel";
             this.pvadjLabel.Size = new System.Drawing.Size(69, 17);
@@ -560,7 +560,7 @@
             // pvfilnumud
             // 
             this.pvfilnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pvfilnumud.Location = new System.Drawing.Point(200, 65);
+            this.pvfilnumud.Location = new System.Drawing.Point(209, 68);
             this.pvfilnumud.Name = "pvfilnumud";
             this.pvfilnumud.Size = new System.Drawing.Size(62, 22);
             this.pvfilnumud.TabIndex = 17;
@@ -570,7 +570,7 @@
             // 
             this.pvfilLabel.AutoSize = true;
             this.pvfilLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pvfilLabel.Location = new System.Drawing.Point(201, 44);
+            this.pvfilLabel.Location = new System.Drawing.Point(210, 48);
             this.pvfilLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pvfilLabel.Name = "pvfilLabel";
             this.pvfilLabel.Size = new System.Drawing.Size(61, 17);
@@ -584,7 +584,7 @@
             this.inputLabel.Location = new System.Drawing.Point(4, 0);
             this.inputLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.inputLabel.Name = "inputLabel";
-            this.inputLabel.Size = new System.Drawing.Size(89, 15);
+            this.inputLabel.Size = new System.Drawing.Size(89, 17);
             this.inputLabel.TabIndex = 8;
             this.inputLabel.Text = "INPUT TYPE";
             // 
@@ -1144,7 +1144,7 @@
             this.minimizebtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
             this.minimizebtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.minimizebtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.minimizebtn.Location = new System.Drawing.Point(902, 5);
+            this.minimizebtn.Location = new System.Drawing.Point(893, 5);
             this.minimizebtn.Name = "minimizebtn";
             this.minimizebtn.Size = new System.Drawing.Size(41, 34);
             this.minimizebtn.TabIndex = 42;
@@ -1157,8 +1157,8 @@
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(948, 5);
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(938, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(45, 34);
             this.button1.TabIndex = 43;
@@ -1324,10 +1324,10 @@
             // deviceinfotlp
             // 
             this.deviceinfotlp.ColumnCount = 4;
-            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.73891F));
-            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.26109F));
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.78534F));
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.21466F));
             this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 132F));
             this.deviceinfotlp.Controls.Add(this.label8, 0, 0);
             this.deviceinfotlp.Controls.Add(this.label9, 0, 1);
             this.deviceinfotlp.Controls.Add(this.swLabel, 1, 1);
@@ -1364,7 +1364,7 @@
             // prodIDLabel
             // 
             this.prodIDLabel.AutoSize = true;
-            this.prodIDLabel.Location = new System.Drawing.Point(100, 0);
+            this.prodIDLabel.Location = new System.Drawing.Point(99, 0);
             this.prodIDLabel.Name = "prodIDLabel";
             this.prodIDLabel.Size = new System.Drawing.Size(0, 17);
             this.prodIDLabel.TabIndex = 6;
