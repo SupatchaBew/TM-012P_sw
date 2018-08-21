@@ -119,5 +119,15 @@ namespace TM_012P_Setup_Program.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TM_012P_diagram {
+            get {
+                object obj = ResourceManager.GetObject("TM-012P_diagram", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

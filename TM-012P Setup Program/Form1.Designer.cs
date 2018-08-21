@@ -29,26 +29,27 @@
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ComPanel = new System.Windows.Forms.Panel();
             this.connectButton = new System.Windows.Forms.Button();
-            this.swLabel = new System.Windows.Forms.Label();
             this.deviceBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
+            this.swLabel = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.inputPanel = new System.Windows.Forms.Panel();
+            this.actionTextBox = new System.Windows.Forms.TextBox();
             this.outputsetLabel = new System.Windows.Forms.Label();
             this.inputsetLabel = new System.Windows.Forms.Label();
             this.inputsetPanel = new System.Windows.Forms.Panel();
+            this.settinglimittlp = new System.Windows.Forms.TableLayoutPanel();
+            this.sllLabel = new System.Windows.Forms.Label();
+            this.slhLabel = new System.Windows.Forms.Label();
+            this.sllnumud = new System.Windows.Forms.NumericUpDown();
+            this.slhnumud = new System.Windows.Forms.NumericUpDown();
             this.inputsettlp = new System.Windows.Forms.TableLayoutPanel();
-            this.inputLabel = new System.Windows.Forms.Label();
             this.inputBox = new System.Windows.Forms.ComboBox();
             this.degreeLabel = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -58,27 +59,25 @@
             this.pvgainnumud = new System.Windows.Forms.NumericUpDown();
             this.pvadjnumud = new System.Windows.Forms.NumericUpDown();
             this.pvadjLabel = new System.Windows.Forms.Label();
-            this.slhLabel = new System.Windows.Forms.Label();
-            this.sllLabel = new System.Windows.Forms.Label();
-            this.slhnumud = new System.Windows.Forms.NumericUpDown();
             this.pvfilnumud = new System.Windows.Forms.NumericUpDown();
-            this.sllnumud = new System.Windows.Forms.NumericUpDown();
             this.pvfilLabel = new System.Windows.Forms.Label();
-            this.statusLabel = new System.Windows.Forms.Label();
+            this.inputLabel = new System.Windows.Forms.Label();
             this.configloadprgbar = new System.Windows.Forms.ProgressBar();
             this.applyButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.setdefButton = new System.Windows.Forms.Button();
+            this.outputsetPanel = new System.Windows.Forms.Panel();
+            this.polaritytlp = new System.Windows.Forms.TableLayoutPanel();
+            this.invLabel = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.invertrdb = new System.Windows.Forms.RadioButton();
             this.noninvertrdb = new System.Windows.Forms.RadioButton();
-            this.invLabel = new System.Windows.Forms.Label();
-            this.inhLabel = new System.Windows.Forms.Label();
+            this.outputsettlp = new System.Windows.Forms.TableLayoutPanel();
             this.inlLabel = new System.Windows.Forms.Label();
-            this.inhnumud = new System.Windows.Forms.NumericUpDown();
             this.inlnumud = new System.Windows.Forms.NumericUpDown();
-            this.runButton = new System.Windows.Forms.Button();
+            this.inhLabel = new System.Windows.Forms.Label();
+            this.inhnumud = new System.Windows.Forms.NumericUpDown();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.setdefButton = new System.Windows.Forms.Button();
             this.device_serialPort = new System.IO.Ports.SerialPort(this.components);
             this.panel4 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -106,52 +105,63 @@
             this.outputLabel = new System.Windows.Forms.Label();
             this.outunitLabel = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.timerchart = new System.Windows.Forms.Timer(this.components);
-            this.outputChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.chartPanel = new System.Windows.Forms.Panel();
-            this.readalwbtn = new System.Windows.Forms.Button();
-            this.clrchartbtn = new System.Windows.Forms.Button();
-            this.outputsetPanel = new System.Windows.Forms.Panel();
-            this.outputsettlp = new System.Windows.Forms.TableLayoutPanel();
             this.minimizebtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.helpPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
             this.helppanelhead = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.swnameLabel = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.swverLabel = new System.Windows.Forms.Label();
+            this.usagdetPanel = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.pleaseclickLabel = new System.Windows.Forms.Label();
+            this.wiringpicbox = new System.Windows.Forms.PictureBox();
+            this.deviceinfotlp = new System.Windows.Forms.TableLayoutPanel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.prodIDLabel = new System.Windows.Forms.Label();
+            this.wiringLabel = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.devinfoLabel = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.ComPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.inputPanel.SuspendLayout();
             this.inputsetPanel.SuspendLayout();
+            this.settinglimittlp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sllnumud)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slhnumud)).BeginInit();
             this.inputsettlp.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pvgainnumud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pvadjnumud)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.slhnumud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pvfilnumud)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sllnumud)).BeginInit();
+            this.outputsetPanel.SuspendLayout();
+            this.polaritytlp.SuspendLayout();
             this.panel7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inhnumud)).BeginInit();
+            this.outputsettlp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inlnumud)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inhnumud)).BeginInit();
             this.panel4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.outputChart)).BeginInit();
-            this.chartPanel.SuspendLayout();
-            this.outputsetPanel.SuspendLayout();
-            this.outputsettlp.SuspendLayout();
             this.helpPanel.SuspendLayout();
             this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.usagdetPanel.SuspendLayout();
+            this.panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wiringpicbox)).BeginInit();
+            this.deviceinfotlp.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -159,14 +169,13 @@
             // 
             this.ComPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
             this.ComPanel.Controls.Add(this.connectButton);
-            this.ComPanel.Controls.Add(this.swLabel);
             this.ComPanel.Controls.Add(this.deviceBox);
             this.ComPanel.Controls.Add(this.label1);
             this.ComPanel.Controls.Add(this.panel2);
             this.ComPanel.Location = new System.Drawing.Point(16, 48);
             this.ComPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ComPanel.Name = "ComPanel";
-            this.ComPanel.Size = new System.Drawing.Size(347, 125);
+            this.ComPanel.Size = new System.Drawing.Size(402, 97);
             this.ComPanel.TabIndex = 2;
             // 
             // connectButton
@@ -174,42 +183,34 @@
             this.connectButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
             this.connectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.connectButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.connectButton.Location = new System.Drawing.Point(195, 50);
+            this.connectButton.Location = new System.Drawing.Point(268, 42);
             this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(113, 44);
+            this.connectButton.Size = new System.Drawing.Size(113, 42);
             this.connectButton.TabIndex = 21;
             this.connectButton.Text = "Connect";
             this.connectButton.UseVisualStyleBackColor = true;
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
-            // swLabel
-            // 
-            this.swLabel.AutoSize = true;
-            this.swLabel.ForeColor = System.Drawing.Color.Turquoise;
-            this.swLabel.Location = new System.Drawing.Point(41, 97);
-            this.swLabel.Name = "swLabel";
-            this.swLabel.Size = new System.Drawing.Size(0, 17);
-            this.swLabel.TabIndex = 5;
-            // 
             // deviceBox
             // 
             this.deviceBox.FormattingEnabled = true;
-            this.deviceBox.Location = new System.Drawing.Point(44, 65);
+            this.deviceBox.Location = new System.Drawing.Point(124, 50);
             this.deviceBox.Margin = new System.Windows.Forms.Padding(4);
             this.deviceBox.Name = "deviceBox";
-            this.deviceBox.Size = new System.Drawing.Size(113, 24);
+            this.deviceBox.Size = new System.Drawing.Size(94, 24);
             this.deviceBox.TabIndex = 4;
+            this.deviceBox.Click += new System.EventHandler(this.deviceBox_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(41, 40);
+            this.label1.ForeColor = System.Drawing.Color.NavajoWhite;
+            this.label1.Location = new System.Drawing.Point(12, 53);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 17);
+            this.label1.Size = new System.Drawing.Size(108, 17);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Select Port :";
+            this.label1.Text = "SELECT PORT:";
             // 
             // panel2
             // 
@@ -218,7 +219,7 @@
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(347, 28);
+            this.panel2.Size = new System.Drawing.Size(402, 28);
             this.panel2.TabIndex = 4;
             // 
             // label3
@@ -232,6 +233,15 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "COMMUNICATION";
             // 
+            // swLabel
+            // 
+            this.swLabel.AutoSize = true;
+            this.swLabel.ForeColor = System.Drawing.Color.Turquoise;
+            this.swLabel.Location = new System.Drawing.Point(100, 23);
+            this.swLabel.Name = "swLabel";
+            this.swLabel.Size = new System.Drawing.Size(0, 17);
+            this.swLabel.TabIndex = 5;
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(32)))), ((int)(((byte)(38)))));
@@ -239,7 +249,7 @@
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Margin = new System.Windows.Forms.Padding(4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(377, 30);
+            this.panel3.Size = new System.Drawing.Size(548, 29);
             this.panel3.TabIndex = 6;
             // 
             // label2
@@ -247,38 +257,51 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(149, 8);
+            this.label2.Location = new System.Drawing.Point(243, 7);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 17);
+            this.label2.Size = new System.Drawing.Size(77, 17);
             this.label2.TabIndex = 0;
-            this.label2.Text = "SETTING";
+            this.label2.Text = "SETTINGS";
             // 
             // inputPanel
             // 
             this.inputPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
+            this.inputPanel.Controls.Add(this.actionTextBox);
             this.inputPanel.Controls.Add(this.outputsetLabel);
             this.inputPanel.Controls.Add(this.inputsetLabel);
             this.inputPanel.Controls.Add(this.inputsetPanel);
-            this.inputPanel.Controls.Add(this.statusLabel);
             this.inputPanel.Controls.Add(this.configloadprgbar);
             this.inputPanel.Controls.Add(this.applyButton);
             this.inputPanel.Controls.Add(this.loadButton);
+            this.inputPanel.Controls.Add(this.outputsetPanel);
             this.inputPanel.Controls.Add(this.saveButton);
             this.inputPanel.Controls.Add(this.setdefButton);
             this.inputPanel.Controls.Add(this.panel3);
-            this.inputPanel.Location = new System.Drawing.Point(16, 193);
+            this.inputPanel.Location = new System.Drawing.Point(440, 288);
             this.inputPanel.Margin = new System.Windows.Forms.Padding(0);
             this.inputPanel.Name = "inputPanel";
-            this.inputPanel.Size = new System.Drawing.Size(347, 461);
+            this.inputPanel.Size = new System.Drawing.Size(548, 364);
             this.inputPanel.TabIndex = 5;
+            // 
+            // actionTextBox
+            // 
+            this.actionTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.actionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.actionTextBox.ForeColor = System.Drawing.Color.DarkSeaGreen;
+            this.actionTextBox.Location = new System.Drawing.Point(13, 241);
+            this.actionTextBox.Multiline = true;
+            this.actionTextBox.Name = "actionTextBox";
+            this.actionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.actionTextBox.Size = new System.Drawing.Size(307, 72);
+            this.actionTextBox.TabIndex = 41;
             // 
             // outputsetLabel
             // 
             this.outputsetLabel.AutoSize = true;
             this.outputsetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.outputsetLabel.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.outputsetLabel.Location = new System.Drawing.Point(13, 240);
+            this.outputsetLabel.ForeColor = System.Drawing.Color.NavajoWhite;
+            this.outputsetLabel.Location = new System.Drawing.Point(341, 38);
             this.outputsetLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.outputsetLabel.Name = "outputsetLabel";
             this.outputsetLabel.Size = new System.Drawing.Size(66, 17);
@@ -289,8 +312,8 @@
             // 
             this.inputsetLabel.AutoSize = true;
             this.inputsetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.inputsetLabel.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.inputsetLabel.Location = new System.Drawing.Point(13, 33);
+            this.inputsetLabel.ForeColor = System.Drawing.Color.NavajoWhite;
+            this.inputsetLabel.Location = new System.Drawing.Point(12, 37);
             this.inputsetLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.inputsetLabel.Name = "inputsetLabel";
             this.inputsetLabel.Size = new System.Drawing.Size(49, 17);
@@ -300,19 +323,87 @@
             // inputsetPanel
             // 
             this.inputsetPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
+            this.inputsetPanel.Controls.Add(this.settinglimittlp);
             this.inputsetPanel.Controls.Add(this.inputsettlp);
-            this.inputsetPanel.Location = new System.Drawing.Point(0, 55);
+            this.inputsetPanel.Location = new System.Drawing.Point(13, 58);
             this.inputsetPanel.Name = "inputsetPanel";
-            this.inputsetPanel.Size = new System.Drawing.Size(347, 178);
+            this.inputsetPanel.Size = new System.Drawing.Size(310, 172);
             this.inputsetPanel.TabIndex = 38;
+            // 
+            // settinglimittlp
+            // 
+            this.settinglimittlp.ColumnCount = 2;
+            this.settinglimittlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.settinglimittlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.settinglimittlp.Controls.Add(this.sllLabel, 0, 0);
+            this.settinglimittlp.Controls.Add(this.slhLabel, 1, 0);
+            this.settinglimittlp.Controls.Add(this.sllnumud, 0, 1);
+            this.settinglimittlp.Controls.Add(this.slhnumud, 1, 1);
+            this.settinglimittlp.Location = new System.Drawing.Point(11, 108);
+            this.settinglimittlp.Name = "settinglimittlp";
+            this.settinglimittlp.RowCount = 2;
+            this.settinglimittlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.5F));
+            this.settinglimittlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.5F));
+            this.settinglimittlp.Size = new System.Drawing.Size(285, 48);
+            this.settinglimittlp.TabIndex = 38;
+            // 
+            // sllLabel
+            // 
+            this.sllLabel.AutoSize = true;
+            this.sllLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.sllLabel.Location = new System.Drawing.Point(3, 0);
+            this.sllLabel.Name = "sllLabel";
+            this.sllLabel.Size = new System.Drawing.Size(114, 17);
+            this.sllLabel.TabIndex = 27;
+            this.sllLabel.Text = "Setting Limit Low";
+            // 
+            // slhLabel
+            // 
+            this.slhLabel.AutoSize = true;
+            this.slhLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.slhLabel.Location = new System.Drawing.Point(145, 0);
+            this.slhLabel.Name = "slhLabel";
+            this.slhLabel.Size = new System.Drawing.Size(118, 17);
+            this.slhLabel.TabIndex = 26;
+            this.slhLabel.Text = "Setting Limit High";
+            // 
+            // sllnumud
+            // 
+            this.sllnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.sllnumud.DecimalPlaces = 1;
+            this.sllnumud.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.sllnumud.Location = new System.Drawing.Point(3, 21);
+            this.sllnumud.Name = "sllnumud";
+            this.sllnumud.Size = new System.Drawing.Size(107, 22);
+            this.sllnumud.TabIndex = 22;
+            // 
+            // slhnumud
+            // 
+            this.slhnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.slhnumud.DecimalPlaces = 1;
+            this.slhnumud.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.slhnumud.Location = new System.Drawing.Point(145, 21);
+            this.slhnumud.Name = "slhnumud";
+            this.slhnumud.Size = new System.Drawing.Size(111, 22);
+            this.slhnumud.TabIndex = 23;
             // 
             // inputsettlp
             // 
             this.inputsettlp.ColumnCount = 3;
-            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.23077F));
-            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.76923F));
-            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-            this.inputsettlp.Controls.Add(this.inputLabel, 0, 0);
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.40239F));
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.59761F));
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.inputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.inputsettlp.Controls.Add(this.inputBox, 0, 1);
             this.inputsettlp.Controls.Add(this.degreeLabel, 1, 0);
             this.inputsettlp.Controls.Add(this.panel6, 1, 1);
@@ -320,42 +411,28 @@
             this.inputsettlp.Controls.Add(this.pvgainnumud, 0, 3);
             this.inputsettlp.Controls.Add(this.pvadjnumud, 1, 3);
             this.inputsettlp.Controls.Add(this.pvadjLabel, 1, 2);
-            this.inputsettlp.Controls.Add(this.slhLabel, 1, 4);
-            this.inputsettlp.Controls.Add(this.sllLabel, 0, 4);
-            this.inputsettlp.Controls.Add(this.slhnumud, 1, 5);
             this.inputsettlp.Controls.Add(this.pvfilnumud, 2, 3);
-            this.inputsettlp.Controls.Add(this.sllnumud, 0, 5);
             this.inputsettlp.Controls.Add(this.pvfilLabel, 2, 2);
-            this.inputsettlp.Location = new System.Drawing.Point(9, 19);
+            this.inputsettlp.Controls.Add(this.inputLabel, 0, 0);
+            this.inputsettlp.Location = new System.Drawing.Point(11, 12);
             this.inputsettlp.Name = "inputsettlp";
-            this.inputsettlp.RowCount = 6;
-            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.25806F));
-            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.74194F));
-            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.inputsettlp.RowCount = 4;
+            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.69388F));
+            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65.30612F));
+            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.inputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.inputsettlp.Size = new System.Drawing.Size(328, 138);
+            this.inputsettlp.Size = new System.Drawing.Size(285, 95);
             this.inputsettlp.TabIndex = 37;
-            // 
-            // inputLabel
-            // 
-            this.inputLabel.AutoSize = true;
-            this.inputLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.inputLabel.Location = new System.Drawing.Point(4, 0);
-            this.inputLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.inputLabel.Name = "inputLabel";
-            this.inputLabel.Size = new System.Drawing.Size(89, 16);
-            this.inputLabel.TabIndex = 8;
-            this.inputLabel.Text = "INPUT TYPE";
             // 
             // inputBox
             // 
             this.inputBox.FormattingEnabled = true;
-            this.inputBox.Location = new System.Drawing.Point(4, 20);
+            this.inputBox.Location = new System.Drawing.Point(4, 19);
             this.inputBox.Margin = new System.Windows.Forms.Padding(4);
             this.inputBox.Name = "inputBox";
-            this.inputBox.Size = new System.Drawing.Size(109, 24);
+            this.inputBox.Size = new System.Drawing.Size(89, 24);
             this.inputBox.TabIndex = 7;
             this.inputBox.SelectionChangeCommitted += new System.EventHandler(this.inputBox_SelectionChangeCommitted);
             // 
@@ -363,10 +440,10 @@
             // 
             this.degreeLabel.AutoSize = true;
             this.degreeLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.degreeLabel.Location = new System.Drawing.Point(128, 0);
+            this.degreeLabel.Location = new System.Drawing.Point(101, 0);
             this.degreeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.degreeLabel.Name = "degreeLabel";
-            this.degreeLabel.Size = new System.Drawing.Size(101, 16);
+            this.degreeLabel.Size = new System.Drawing.Size(65, 15);
             this.degreeLabel.TabIndex = 11;
             this.degreeLabel.Text = "UNIT (Degree)";
             // 
@@ -374,9 +451,9 @@
             // 
             this.panel6.Controls.Add(this.deg_crdb);
             this.panel6.Controls.Add(this.deg_frdb);
-            this.panel6.Location = new System.Drawing.Point(127, 19);
+            this.panel6.Location = new System.Drawing.Point(100, 18);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(105, 27);
+            this.panel6.Size = new System.Drawing.Size(94, 23);
             this.panel6.TabIndex = 34;
             // 
             // deg_crdb
@@ -384,9 +461,10 @@
             this.deg_crdb.AutoSize = true;
             this.deg_crdb.FlatAppearance.BorderColor = System.Drawing.Color.Turquoise;
             this.deg_crdb.FlatAppearance.BorderSize = 3;
-            this.deg_crdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.Turquoise;
+            this.deg_crdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.DarkSlateGray;
+            this.deg_crdb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Cyan;
             this.deg_crdb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.deg_crdb.Location = new System.Drawing.Point(4, 8);
+            this.deg_crdb.Location = new System.Drawing.Point(4, 3);
             this.deg_crdb.Margin = new System.Windows.Forms.Padding(4);
             this.deg_crdb.Name = "deg_crdb";
             this.deg_crdb.Size = new System.Drawing.Size(44, 21);
@@ -398,11 +476,12 @@
             // deg_frdb
             // 
             this.deg_frdb.AutoSize = true;
-            this.deg_frdb.FlatAppearance.BorderColor = System.Drawing.Color.Turquoise;
+            this.deg_frdb.FlatAppearance.BorderColor = System.Drawing.Color.DarkCyan;
             this.deg_frdb.FlatAppearance.BorderSize = 3;
-            this.deg_frdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.Turquoise;
+            this.deg_frdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.DarkSlateGray;
+            this.deg_frdb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Cyan;
             this.deg_frdb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.deg_frdb.Location = new System.Drawing.Point(59, 8);
+            this.deg_frdb.Location = new System.Drawing.Point(59, 4);
             this.deg_frdb.Margin = new System.Windows.Forms.Padding(4);
             this.deg_frdb.Name = "deg_frdb";
             this.deg_frdb.Size = new System.Drawing.Size(43, 21);
@@ -415,29 +494,30 @@
             // 
             this.pvgainLabel.AutoSize = true;
             this.pvgainLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pvgainLabel.Location = new System.Drawing.Point(4, 49);
+            this.pvgainLabel.Location = new System.Drawing.Point(4, 44);
             this.pvgainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pvgainLabel.Name = "pvgainLabel";
-            this.pvgainLabel.Size = new System.Drawing.Size(60, 16);
+            this.pvgainLabel.Size = new System.Drawing.Size(60, 17);
             this.pvgainLabel.TabIndex = 12;
             this.pvgainLabel.Text = "PV Gain";
             // 
             // pvgainnumud
             // 
             this.pvgainnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pvgainnumud.Location = new System.Drawing.Point(3, 68);
+            this.pvgainnumud.DecimalPlaces = 2;
+            this.pvgainnumud.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.pvgainnumud.Location = new System.Drawing.Point(3, 65);
             this.pvgainnumud.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.pvgainnumud.Minimum = new decimal(new int[] {
-            80,
+            999,
             0,
             0,
             0});
             this.pvgainnumud.Name = "pvgainnumud";
-            this.pvgainnumud.Size = new System.Drawing.Size(70, 22);
+            this.pvgainnumud.Size = new System.Drawing.Size(90, 22);
             this.pvgainnumud.TabIndex = 15;
             this.pvgainnumud.Value = new decimal(new int[] {
             80,
@@ -449,19 +529,20 @@
             // pvadjnumud
             // 
             this.pvadjnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pvadjnumud.Location = new System.Drawing.Point(127, 68);
+            this.pvadjnumud.DecimalPlaces = 1;
+            this.pvadjnumud.Location = new System.Drawing.Point(100, 65);
             this.pvadjnumud.Maximum = new decimal(new int[] {
-            9999,
+            99999,
             0,
             0,
             0});
             this.pvadjnumud.Minimum = new decimal(new int[] {
-            199,
+            999,
             0,
             0,
             -2147483648});
             this.pvadjnumud.Name = "pvadjnumud";
-            this.pvadjnumud.Size = new System.Drawing.Size(66, 22);
+            this.pvadjnumud.Size = new System.Drawing.Size(86, 22);
             this.pvadjnumud.TabIndex = 16;
             this.pvadjnumud.ValueChanged += new System.EventHandler(this.pvadjnumud_ValueChanged);
             // 
@@ -469,101 +550,50 @@
             // 
             this.pvadjLabel.AutoSize = true;
             this.pvadjLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pvadjLabel.Location = new System.Drawing.Point(128, 49);
+            this.pvadjLabel.Location = new System.Drawing.Point(101, 44);
             this.pvadjLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pvadjLabel.Name = "pvadjLabel";
-            this.pvadjLabel.Size = new System.Drawing.Size(69, 16);
+            this.pvadjLabel.Size = new System.Drawing.Size(69, 17);
             this.pvadjLabel.TabIndex = 13;
             this.pvadjLabel.Text = "PV Adjust";
-            // 
-            // slhLabel
-            // 
-            this.slhLabel.AutoSize = true;
-            this.slhLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.slhLabel.Location = new System.Drawing.Point(127, 95);
-            this.slhLabel.Name = "slhLabel";
-            this.slhLabel.Size = new System.Drawing.Size(118, 17);
-            this.slhLabel.TabIndex = 26;
-            this.slhLabel.Text = "Setting Limit High";
-            // 
-            // sllLabel
-            // 
-            this.sllLabel.AutoSize = true;
-            this.sllLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.sllLabel.Location = new System.Drawing.Point(3, 95);
-            this.sllLabel.Name = "sllLabel";
-            this.sllLabel.Size = new System.Drawing.Size(114, 17);
-            this.sllLabel.TabIndex = 27;
-            this.sllLabel.Text = "Setting Limit Low";
-            // 
-            // slhnumud
-            // 
-            this.slhnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.slhnumud.DecimalPlaces = 1;
-            this.slhnumud.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.slhnumud.Location = new System.Drawing.Point(127, 115);
-            this.slhnumud.Name = "slhnumud";
-            this.slhnumud.Size = new System.Drawing.Size(111, 22);
-            this.slhnumud.TabIndex = 23;
             // 
             // pvfilnumud
             // 
             this.pvfilnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pvfilnumud.Location = new System.Drawing.Point(255, 68);
-            this.pvfilnumud.Maximum = new decimal(new int[] {
-            32,
-            0,
-            0,
-            0});
+            this.pvfilnumud.Location = new System.Drawing.Point(200, 65);
             this.pvfilnumud.Name = "pvfilnumud";
-            this.pvfilnumud.Size = new System.Drawing.Size(57, 22);
+            this.pvfilnumud.Size = new System.Drawing.Size(62, 22);
             this.pvfilnumud.TabIndex = 17;
             this.pvfilnumud.ValueChanged += new System.EventHandler(this.pvfilnumud_ValueChanged);
-            // 
-            // sllnumud
-            // 
-            this.sllnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sllnumud.DecimalPlaces = 1;
-            this.sllnumud.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.sllnumud.Location = new System.Drawing.Point(3, 115);
-            this.sllnumud.Name = "sllnumud";
-            this.sllnumud.Size = new System.Drawing.Size(107, 22);
-            this.sllnumud.TabIndex = 22;
             // 
             // pvfilLabel
             // 
             this.pvfilLabel.AutoSize = true;
             this.pvfilLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pvfilLabel.Location = new System.Drawing.Point(256, 49);
+            this.pvfilLabel.Location = new System.Drawing.Point(201, 44);
             this.pvfilLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.pvfilLabel.Name = "pvfilLabel";
-            this.pvfilLabel.Size = new System.Drawing.Size(61, 16);
+            this.pvfilLabel.Size = new System.Drawing.Size(61, 17);
             this.pvfilLabel.TabIndex = 14;
             this.pvfilLabel.Text = "PV Filter";
             // 
-            // statusLabel
+            // inputLabel
             // 
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.BackColor = System.Drawing.Color.Transparent;
-            this.statusLabel.Location = new System.Drawing.Point(178, 362);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 17);
-            this.statusLabel.TabIndex = 36;
+            this.inputLabel.AutoSize = true;
+            this.inputLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.inputLabel.Location = new System.Drawing.Point(4, 0);
+            this.inputLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.inputLabel.Name = "inputLabel";
+            this.inputLabel.Size = new System.Drawing.Size(89, 15);
+            this.inputLabel.TabIndex = 8;
+            this.inputLabel.Text = "INPUT TYPE";
             // 
             // configloadprgbar
             // 
             this.configloadprgbar.ForeColor = System.Drawing.Color.DarkTurquoise;
-            this.configloadprgbar.Location = new System.Drawing.Point(169, 384);
+            this.configloadprgbar.Location = new System.Drawing.Point(339, 238);
             this.configloadprgbar.Name = "configloadprgbar";
-            this.configloadprgbar.Size = new System.Drawing.Size(165, 31);
+            this.configloadprgbar.Size = new System.Drawing.Size(198, 24);
             this.configloadprgbar.Step = 1;
             this.configloadprgbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.configloadprgbar.TabIndex = 35;
@@ -575,10 +605,10 @@
             this.applyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.applyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.applyButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.applyButton.Location = new System.Drawing.Point(19, 384);
+            this.applyButton.Location = new System.Drawing.Point(339, 273);
             this.applyButton.Margin = new System.Windows.Forms.Padding(4);
             this.applyButton.Name = "applyButton";
-            this.applyButton.Size = new System.Drawing.Size(143, 30);
+            this.applyButton.Size = new System.Drawing.Size(198, 37);
             this.applyButton.TabIndex = 31;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = false;
@@ -588,46 +618,56 @@
             // 
             this.loadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.loadButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.loadButton.Location = new System.Drawing.Point(120, 422);
+            this.loadButton.Location = new System.Drawing.Point(179, 324);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(87, 28);
+            this.loadButton.Size = new System.Drawing.Size(141, 28);
             this.loadButton.TabIndex = 21;
             this.loadButton.Text = "Load";
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
-            // saveButton
+            // outputsetPanel
             // 
-            this.saveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.saveButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.saveButton.Location = new System.Drawing.Point(19, 422);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(95, 28);
-            this.saveButton.TabIndex = 20;
-            this.saveButton.Text = "Save";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            this.outputsetPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
+            this.outputsetPanel.Controls.Add(this.polaritytlp);
+            this.outputsetPanel.Controls.Add(this.outputsettlp);
+            this.outputsetPanel.Location = new System.Drawing.Point(340, 58);
+            this.outputsetPanel.Name = "outputsetPanel";
+            this.outputsetPanel.Size = new System.Drawing.Size(197, 172);
+            this.outputsetPanel.TabIndex = 39;
             // 
-            // setdefButton
+            // polaritytlp
             // 
-            this.setdefButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.setdefButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.setdefButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.setdefButton.Location = new System.Drawing.Point(213, 421);
-            this.setdefButton.Name = "setdefButton";
-            this.setdefButton.Size = new System.Drawing.Size(119, 28);
-            this.setdefButton.TabIndex = 19;
-            this.setdefButton.Text = "Restore Defaults";
-            this.setdefButton.UseVisualStyleBackColor = true;
-            this.setdefButton.Click += new System.EventHandler(this.setdefButton_Click);
+            this.polaritytlp.ColumnCount = 1;
+            this.polaritytlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.polaritytlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.polaritytlp.Controls.Add(this.invLabel, 0, 0);
+            this.polaritytlp.Controls.Add(this.panel7, 0, 1);
+            this.polaritytlp.Location = new System.Drawing.Point(9, 75);
+            this.polaritytlp.Name = "polaritytlp";
+            this.polaritytlp.RowCount = 2;
+            this.polaritytlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.69231F));
+            this.polaritytlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.30769F));
+            this.polaritytlp.Size = new System.Drawing.Size(175, 72);
+            this.polaritytlp.TabIndex = 1;
+            // 
+            // invLabel
+            // 
+            this.invLabel.AutoSize = true;
+            this.invLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.invLabel.Location = new System.Drawing.Point(3, 0);
+            this.invLabel.Name = "invLabel";
+            this.invLabel.Size = new System.Drawing.Size(58, 17);
+            this.invLabel.TabIndex = 30;
+            this.invLabel.Text = "Polarlity";
             // 
             // panel7
             // 
             this.panel7.Controls.Add(this.invertrdb);
             this.panel7.Controls.Add(this.noninvertrdb);
-            this.panel7.Location = new System.Drawing.Point(207, 20);
+            this.panel7.Location = new System.Drawing.Point(3, 22);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(118, 54);
+            this.panel7.Size = new System.Drawing.Size(169, 47);
             this.panel7.TabIndex = 14;
             // 
             // invertrdb
@@ -635,9 +675,10 @@
             this.invertrdb.AutoSize = true;
             this.invertrdb.FlatAppearance.BorderColor = System.Drawing.Color.Turquoise;
             this.invertrdb.FlatAppearance.BorderSize = 3;
-            this.invertrdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.Turquoise;
+            this.invertrdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.DarkSlateGray;
+            this.invertrdb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Cyan;
             this.invertrdb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.invertrdb.Location = new System.Drawing.Point(4, 29);
+            this.invertrdb.Location = new System.Drawing.Point(8, 25);
             this.invertrdb.Margin = new System.Windows.Forms.Padding(4);
             this.invertrdb.Name = "invertrdb";
             this.invertrdb.Size = new System.Drawing.Size(83, 21);
@@ -651,9 +692,10 @@
             this.noninvertrdb.AutoSize = true;
             this.noninvertrdb.FlatAppearance.BorderColor = System.Drawing.Color.Turquoise;
             this.noninvertrdb.FlatAppearance.BorderSize = 3;
-            this.noninvertrdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.Turquoise;
+            this.noninvertrdb.FlatAppearance.CheckedBackColor = System.Drawing.Color.DarkSlateGray;
+            this.noninvertrdb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Cyan;
             this.noninvertrdb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.noninvertrdb.Location = new System.Drawing.Point(4, 4);
+            this.noninvertrdb.Location = new System.Drawing.Point(8, 3);
             this.noninvertrdb.Margin = new System.Windows.Forms.Padding(4);
             this.noninvertrdb.Name = "noninvertrdb";
             this.noninvertrdb.Size = new System.Drawing.Size(114, 21);
@@ -662,25 +704,26 @@
             this.noninvertrdb.Text = "Non-inverting";
             this.noninvertrdb.UseVisualStyleBackColor = true;
             // 
-            // invLabel
+            // outputsettlp
             // 
-            this.invLabel.AutoSize = true;
-            this.invLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.invLabel.Location = new System.Drawing.Point(207, 0);
-            this.invLabel.Name = "invLabel";
-            this.invLabel.Size = new System.Drawing.Size(58, 17);
-            this.invLabel.TabIndex = 30;
-            this.invLabel.Text = "Polarlity";
-            // 
-            // inhLabel
-            // 
-            this.inhLabel.AutoSize = true;
-            this.inhLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.inhLabel.Location = new System.Drawing.Point(107, 0);
-            this.inhLabel.Name = "inhLabel";
-            this.inhLabel.Size = new System.Drawing.Size(70, 17);
-            this.inhLabel.TabIndex = 29;
-            this.inhLabel.Text = "High Limit";
+            this.outputsettlp.ColumnCount = 2;
+            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.72414F));
+            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.27586F));
+            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 126F));
+            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.outputsettlp.Controls.Add(this.inlLabel, 0, 0);
+            this.outputsettlp.Controls.Add(this.inlnumud, 0, 1);
+            this.outputsettlp.Controls.Add(this.inhLabel, 1, 0);
+            this.outputsettlp.Controls.Add(this.inhnumud, 1, 1);
+            this.outputsettlp.Location = new System.Drawing.Point(8, 14);
+            this.outputsettlp.Name = "outputsettlp";
+            this.outputsettlp.RowCount = 2;
+            this.outputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.81818F));
+            this.outputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.18182F));
+            this.outputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.outputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            this.outputsettlp.Size = new System.Drawing.Size(176, 43);
+            this.outputsettlp.TabIndex = 0;
             // 
             // inlLabel
             // 
@@ -691,20 +734,6 @@
             this.inlLabel.Size = new System.Drawing.Size(66, 17);
             this.inlLabel.TabIndex = 28;
             this.inlLabel.Text = "Low Limit";
-            // 
-            // inhnumud
-            // 
-            this.inhnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.inhnumud.DecimalPlaces = 2;
-            this.inhnumud.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.inhnumud.Location = new System.Drawing.Point(107, 20);
-            this.inhnumud.Name = "inhnumud";
-            this.inhnumud.Size = new System.Drawing.Size(94, 22);
-            this.inhnumud.TabIndex = 25;
             // 
             // inlnumud
             // 
@@ -717,31 +746,64 @@
             131072});
             this.inlnumud.Location = new System.Drawing.Point(3, 20);
             this.inlnumud.Name = "inlnumud";
-            this.inlnumud.Size = new System.Drawing.Size(98, 22);
+            this.inlnumud.Size = new System.Drawing.Size(85, 22);
             this.inlnumud.TabIndex = 24;
             // 
-            // runButton
+            // inhLabel
             // 
-            this.runButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.runButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.runButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.runButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.runButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.runButton.Location = new System.Drawing.Point(238, 228);
-            this.runButton.Margin = new System.Windows.Forms.Padding(4);
-            this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(116, 28);
-            this.runButton.TabIndex = 6;
-            this.runButton.Text = "Read once";
-            this.runButton.UseVisualStyleBackColor = false;
-            this.runButton.Click += new System.EventHandler(this.runButton_Click);
+            this.inhLabel.AutoSize = true;
+            this.inhLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.inhLabel.Location = new System.Drawing.Point(94, 0);
+            this.inhLabel.Name = "inhLabel";
+            this.inhLabel.Size = new System.Drawing.Size(70, 17);
+            this.inhLabel.TabIndex = 29;
+            this.inhLabel.Text = "High Limit";
+            // 
+            // inhnumud
+            // 
+            this.inhnumud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.inhnumud.DecimalPlaces = 2;
+            this.inhnumud.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.inhnumud.Location = new System.Drawing.Point(94, 20);
+            this.inhnumud.Name = "inhnumud";
+            this.inhnumud.Size = new System.Drawing.Size(79, 22);
+            this.inhnumud.TabIndex = 25;
+            // 
+            // saveButton
+            // 
+            this.saveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.saveButton.Location = new System.Drawing.Point(14, 324);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(159, 28);
+            this.saveButton.TabIndex = 20;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // setdefButton
+            // 
+            this.setdefButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.setdefButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.setdefButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.setdefButton.Location = new System.Drawing.Point(339, 324);
+            this.setdefButton.Name = "setdefButton";
+            this.setdefButton.Size = new System.Drawing.Size(199, 30);
+            this.setdefButton.TabIndex = 19;
+            this.setdefButton.Text = "Restore Defaults";
+            this.setdefButton.UseVisualStyleBackColor = true;
+            this.setdefButton.Click += new System.EventHandler(this.setdefButton_Click);
             // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
             this.panel4.Controls.Add(this.tableLayoutPanel2);
             this.panel4.Controls.Add(this.tableLayoutPanel1);
-            this.panel4.Location = new System.Drawing.Point(387, 49);
+            this.panel4.Location = new System.Drawing.Point(440, 49);
             this.panel4.Margin = new System.Windows.Forms.Padding(4);
             this.panel4.Name = "panel4";
             this.panel4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -875,6 +937,7 @@
             this.inunitLabel.ForeColor = System.Drawing.Color.Silver;
             this.inunitLabel.Location = new System.Drawing.Point(235, 64);
             this.inunitLabel.Name = "inunitLabel";
+            this.inunitLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.inunitLabel.Size = new System.Drawing.Size(28, 20);
             this.inunitLabel.TabIndex = 10;
             this.inunitLabel.Text = "°C";
@@ -908,7 +971,7 @@
             // 
             this.logoLabel.AutoSize = true;
             this.logoLabel.ForeColor = System.Drawing.Color.Honeydew;
-            this.logoLabel.Location = new System.Drawing.Point(390, 58);
+            this.logoLabel.Location = new System.Drawing.Point(243, 69);
             this.logoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.logoLabel.Name = "logoLabel";
             this.logoLabel.Size = new System.Drawing.Size(82, 17);
@@ -919,7 +982,7 @@
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkColor = System.Drawing.Color.DeepSkyBlue;
-            this.linkLabel1.Location = new System.Drawing.Point(342, 77);
+            this.linkLabel1.Location = new System.Drawing.Point(261, 91);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(132, 17);
@@ -933,7 +996,7 @@
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
             this.panel5.Controls.Add(this.tableLayoutPanel4);
             this.panel5.Controls.Add(this.tableLayoutPanel3);
-            this.panel5.Location = new System.Drawing.Point(674, 49);
+            this.panel5.Location = new System.Drawing.Point(727, 49);
             this.panel5.Name = "panel5";
             this.panel5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.panel5.Size = new System.Drawing.Size(261, 222);
@@ -1075,128 +1138,13 @@
             this.outunitLabel.TabIndex = 12;
             this.outunitLabel.Text = "mA";
             // 
-            // timerchart
-            // 
-            this.timerchart.Interval = 1000;
-            this.timerchart.Tick += new System.EventHandler(this.timerchart_Tick);
-            // 
-            // outputChart
-            // 
-            this.outputChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.outputChart.BorderlineColor = System.Drawing.Color.Empty;
-            this.outputChart.BorderSkin.BackColor = System.Drawing.Color.Transparent;
-            this.outputChart.BorderSkin.PageColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
-            chartArea3.AxisX.LabelStyle.ForeColor = System.Drawing.SystemColors.ControlDark;
-            chartArea3.AxisX.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(94)))), ((int)(((byte)(112)))));
-            chartArea3.AxisX.MajorGrid.Enabled = false;
-            chartArea3.AxisX.MajorTickMark.Enabled = false;
-            chartArea3.AxisX.ScaleView.Size = 10D;
-            chartArea3.AxisY.LabelStyle.ForeColor = System.Drawing.SystemColors.ControlDark;
-            chartArea3.AxisY.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(94)))), ((int)(((byte)(112)))));
-            chartArea3.AxisY.MajorGrid.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(94)))), ((int)(((byte)(112)))));
-            chartArea3.AxisY.MajorTickMark.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(94)))), ((int)(((byte)(112)))));
-            chartArea3.BackColor = System.Drawing.Color.Transparent;
-            chartArea3.CursorX.AutoScroll = false;
-            chartArea3.Name = "ChartArea1";
-            this.outputChart.ChartAreas.Add(chartArea3);
-            legend3.DockedToChartArea = "ChartArea1";
-            legend3.Name = "Legend1";
-            this.outputChart.Legends.Add(legend3);
-            this.outputChart.Location = new System.Drawing.Point(0, 6);
-            this.outputChart.Name = "outputChart";
-            series3.BackImageTransparentColor = System.Drawing.Color.Transparent;
-            series3.BackSecondaryColor = System.Drawing.Color.Transparent;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.LabelBackColor = System.Drawing.Color.Transparent;
-            series3.Legend = "Legend1";
-            series3.MarkerStep = 2;
-            series3.Name = "Output1";
-            series3.YValuesPerPoint = 2;
-            this.outputChart.Series.Add(series3);
-            this.outputChart.Size = new System.Drawing.Size(548, 216);
-            this.outputChart.TabIndex = 13;
-            this.outputChart.Text = "chart1";
-            title3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title3.ForeColor = System.Drawing.Color.LightGray;
-            title3.Name = "LOOP CURRENT (mA)";
-            title3.Text = "LOOP CURRENT (mA)";
-            this.outputChart.Titles.Add(title3);
-            // 
-            // chartPanel
-            // 
-            this.chartPanel.Controls.Add(this.readalwbtn);
-            this.chartPanel.Controls.Add(this.clrchartbtn);
-            this.chartPanel.Controls.Add(this.outputChart);
-            this.chartPanel.Controls.Add(this.runButton);
-            this.chartPanel.Location = new System.Drawing.Point(384, 278);
-            this.chartPanel.Name = "chartPanel";
-            this.chartPanel.Size = new System.Drawing.Size(552, 262);
-            this.chartPanel.TabIndex = 14;
-            // 
-            // readalwbtn
-            // 
-            this.readalwbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.readalwbtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.readalwbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.readalwbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.readalwbtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.readalwbtn.Location = new System.Drawing.Point(114, 228);
-            this.readalwbtn.Margin = new System.Windows.Forms.Padding(4);
-            this.readalwbtn.Name = "readalwbtn";
-            this.readalwbtn.Size = new System.Drawing.Size(116, 28);
-            this.readalwbtn.TabIndex = 36;
-            this.readalwbtn.Text = "Read always";
-            this.readalwbtn.UseVisualStyleBackColor = false;
-            // 
-            // clrchartbtn
-            // 
-            this.clrchartbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.clrchartbtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.clrchartbtn.Location = new System.Drawing.Point(361, 228);
-            this.clrchartbtn.Name = "clrchartbtn";
-            this.clrchartbtn.Size = new System.Drawing.Size(107, 28);
-            this.clrchartbtn.TabIndex = 35;
-            this.clrchartbtn.Text = "Clear";
-            this.clrchartbtn.UseVisualStyleBackColor = true;
-            this.clrchartbtn.Click += new System.EventHandler(this.clrchartbtn_Click);
-            // 
-            // outputsetPanel
-            // 
-            this.outputsetPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
-            this.outputsetPanel.Controls.Add(this.outputsettlp);
-            this.outputsetPanel.Location = new System.Drawing.Point(16, 455);
-            this.outputsetPanel.Name = "outputsetPanel";
-            this.outputsetPanel.Size = new System.Drawing.Size(347, 95);
-            this.outputsetPanel.TabIndex = 39;
-            // 
-            // outputsettlp
-            // 
-            this.outputsettlp.ColumnCount = 3;
-            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.10132F));
-            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.89868F));
-            this.outputsettlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
-            this.outputsettlp.Controls.Add(this.inlLabel, 0, 0);
-            this.outputsettlp.Controls.Add(this.inlnumud, 0, 1);
-            this.outputsettlp.Controls.Add(this.inhLabel, 1, 0);
-            this.outputsettlp.Controls.Add(this.inhnumud, 1, 1);
-            this.outputsettlp.Controls.Add(this.panel7, 2, 1);
-            this.outputsettlp.Controls.Add(this.invLabel, 2, 0);
-            this.outputsettlp.Location = new System.Drawing.Point(9, 15);
-            this.outputsettlp.Name = "outputsettlp";
-            this.outputsettlp.RowCount = 2;
-            this.outputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.37662F));
-            this.outputsettlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.62337F));
-            this.outputsettlp.Size = new System.Drawing.Size(328, 77);
-            this.outputsettlp.TabIndex = 0;
-            // 
             // minimizebtn
             // 
             this.minimizebtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.minimizebtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
             this.minimizebtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.minimizebtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.minimizebtn.Location = new System.Drawing.Point(856, 5);
+            this.minimizebtn.Location = new System.Drawing.Point(902, 5);
             this.minimizebtn.Name = "minimizebtn";
             this.minimizebtn.Size = new System.Drawing.Size(41, 34);
             this.minimizebtn.TabIndex = 42;
@@ -1210,7 +1158,7 @@
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(895, 6);
+            this.button1.Location = new System.Drawing.Point(948, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(45, 34);
             this.button1.TabIndex = 43;
@@ -1221,22 +1169,44 @@
             // helpPanel
             // 
             this.helpPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
+            this.helpPanel.Controls.Add(this.label7);
+            this.helpPanel.Controls.Add(this.label6);
             this.helpPanel.Controls.Add(this.label5);
             this.helpPanel.Controls.Add(this.label4);
             this.helpPanel.Controls.Add(this.panel8);
             this.helpPanel.Controls.Add(this.pictureBox1);
             this.helpPanel.Controls.Add(this.logoLabel);
             this.helpPanel.Controls.Add(this.linkLabel1);
-            this.helpPanel.Location = new System.Drawing.Point(387, 546);
+            this.helpPanel.Location = new System.Drawing.Point(16, 534);
             this.helpPanel.Name = "helpPanel";
-            this.helpPanel.Size = new System.Drawing.Size(548, 108);
+            this.helpPanel.Size = new System.Drawing.Size(402, 118);
             this.helpPanel.TabIndex = 44;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.PowderBlue;
+            this.label7.Location = new System.Drawing.Point(20, 86);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(149, 17);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "----------spec file name";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.PowderBlue;
+            this.label6.Location = new System.Drawing.Point(32, 51);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(132, 17);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "-----manul file name";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Honeydew;
-            this.label5.Location = new System.Drawing.Point(20, 74);
+            this.label5.Location = new System.Drawing.Point(20, 69);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(147, 17);
@@ -1247,7 +1217,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.Honeydew;
-            this.label4.Location = new System.Drawing.Point(20, 45);
+            this.label4.Location = new System.Drawing.Point(20, 34);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(106, 17);
@@ -1260,7 +1230,7 @@
             this.panel8.Controls.Add(this.helppanelhead);
             this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(549, 31);
+            this.panel8.Size = new System.Drawing.Size(402, 31);
             this.panel8.TabIndex = 0;
             // 
             // helppanelhead
@@ -1268,7 +1238,7 @@
             this.helppanelhead.AutoSize = true;
             this.helppanelhead.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helppanelhead.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.helppanelhead.Location = new System.Drawing.Point(227, 7);
+            this.helppanelhead.Location = new System.Drawing.Point(122, 8);
             this.helppanelhead.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.helppanelhead.Name = "helppanelhead";
             this.helppanelhead.Size = new System.Drawing.Size(143, 17);
@@ -1279,11 +1249,11 @@
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(475, 35);
+            this.pictureBox1.Location = new System.Drawing.Point(327, 34);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(69, 60);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Size = new System.Drawing.Size(66, 53);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Tag = "";
@@ -1291,12 +1261,141 @@
             // swnameLabel
             // 
             this.swnameLabel.AutoSize = true;
-            this.swnameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.swnameLabel.Location = new System.Drawing.Point(47, 9);
+            this.swnameLabel.BackColor = System.Drawing.Color.Transparent;
+            this.swnameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.swnameLabel.Location = new System.Drawing.Point(47, 12);
             this.swnameLabel.Name = "swnameLabel";
-            this.swnameLabel.Size = new System.Drawing.Size(279, 24);
+            this.swnameLabel.Size = new System.Drawing.Size(298, 25);
             this.swnameLabel.TabIndex = 45;
             this.swnameLabel.Text = "CONFIGURATION SOFTWARE";
+            // 
+            // swverLabel
+            // 
+            this.swverLabel.AutoSize = true;
+            this.swverLabel.BackColor = System.Drawing.Color.Transparent;
+            this.swverLabel.Location = new System.Drawing.Point(364, 18);
+            this.swverLabel.Name = "swverLabel";
+            this.swverLabel.Size = new System.Drawing.Size(159, 17);
+            this.swverLabel.TabIndex = 47;
+            this.swverLabel.Text = "(Software version 1.0.0)";
+            // 
+            // usagdetPanel
+            // 
+            this.usagdetPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(72)))), ((int)(((byte)(86)))));
+            this.usagdetPanel.Controls.Add(this.panel9);
+            this.usagdetPanel.Controls.Add(this.deviceinfotlp);
+            this.usagdetPanel.Controls.Add(this.wiringLabel);
+            this.usagdetPanel.Controls.Add(this.panel1);
+            this.usagdetPanel.Location = new System.Drawing.Point(16, 163);
+            this.usagdetPanel.Name = "usagdetPanel";
+            this.usagdetPanel.Size = new System.Drawing.Size(402, 355);
+            this.usagdetPanel.TabIndex = 48;
+            // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
+            this.panel9.Controls.Add(this.pleaseclickLabel);
+            this.panel9.Controls.Add(this.wiringpicbox);
+            this.panel9.Location = new System.Drawing.Point(11, 104);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(378, 235);
+            this.panel9.TabIndex = 7;
+            // 
+            // pleaseclickLabel
+            // 
+            this.pleaseclickLabel.AutoSize = true;
+            this.pleaseclickLabel.BackColor = System.Drawing.Color.Transparent;
+            this.pleaseclickLabel.Location = new System.Drawing.Point(118, 109);
+            this.pleaseclickLabel.Name = "pleaseclickLabel";
+            this.pleaseclickLabel.Size = new System.Drawing.Size(0, 17);
+            this.pleaseclickLabel.TabIndex = 0;
+            // 
+            // wiringpicbox
+            // 
+            this.wiringpicbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
+            this.wiringpicbox.Image = global::TM_012P_Setup_Program.Properties.Resources.TM_012P_diagram;
+            this.wiringpicbox.Location = new System.Drawing.Point(0, 0);
+            this.wiringpicbox.Name = "wiringpicbox";
+            this.wiringpicbox.Size = new System.Drawing.Size(386, 235);
+            this.wiringpicbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.wiringpicbox.TabIndex = 2;
+            this.wiringpicbox.TabStop = false;
+            // 
+            // deviceinfotlp
+            // 
+            this.deviceinfotlp.ColumnCount = 4;
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.73891F));
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.26109F));
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.deviceinfotlp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.deviceinfotlp.Controls.Add(this.label8, 0, 0);
+            this.deviceinfotlp.Controls.Add(this.label9, 0, 1);
+            this.deviceinfotlp.Controls.Add(this.swLabel, 1, 1);
+            this.deviceinfotlp.Controls.Add(this.prodIDLabel, 1, 0);
+            this.deviceinfotlp.Location = new System.Drawing.Point(7, 34);
+            this.deviceinfotlp.Name = "deviceinfotlp";
+            this.deviceinfotlp.RowCount = 2;
+            this.deviceinfotlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.deviceinfotlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.deviceinfotlp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.deviceinfotlp.Size = new System.Drawing.Size(373, 47);
+            this.deviceinfotlp.TabIndex = 6;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.NavajoWhite;
+            this.label8.Location = new System.Drawing.Point(3, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(84, 17);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "PRODUCT :";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.NavajoWhite;
+            this.label9.Location = new System.Drawing.Point(3, 23);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(89, 17);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "FIRMWARE :";
+            // 
+            // prodIDLabel
+            // 
+            this.prodIDLabel.AutoSize = true;
+            this.prodIDLabel.Location = new System.Drawing.Point(100, 0);
+            this.prodIDLabel.Name = "prodIDLabel";
+            this.prodIDLabel.Size = new System.Drawing.Size(0, 17);
+            this.prodIDLabel.TabIndex = 6;
+            // 
+            // wiringLabel
+            // 
+            this.wiringLabel.AutoSize = true;
+            this.wiringLabel.ForeColor = System.Drawing.Color.NavajoWhite;
+            this.wiringLabel.Location = new System.Drawing.Point(8, 84);
+            this.wiringLabel.Name = "wiringLabel";
+            this.wiringLabel.Size = new System.Drawing.Size(142, 17);
+            this.wiringLabel.TabIndex = 1;
+            this.wiringLabel.Text = "WIRING DIAGRAMS :";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(32)))), ((int)(((byte)(38)))));
+            this.panel1.Controls.Add(this.devinfoLabel);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(402, 28);
+            this.panel1.TabIndex = 0;
+            // 
+            // devinfoLabel
+            // 
+            this.devinfoLabel.AutoSize = true;
+            this.devinfoLabel.Location = new System.Drawing.Point(102, 6);
+            this.devinfoLabel.Name = "devinfoLabel";
+            this.devinfoLabel.Size = new System.Drawing.Size(156, 17);
+            this.devinfoLabel.TabIndex = 0;
+            this.devinfoLabel.Text = "DEVICE INFORMATION";
             // 
             // pictureBox2
             // 
@@ -1308,33 +1407,23 @@
             this.pictureBox2.TabIndex = 46;
             this.pictureBox2.TabStop = false;
             // 
-            // swverLabel
-            // 
-            this.swverLabel.AutoSize = true;
-            this.swverLabel.Location = new System.Drawing.Point(331, 11);
-            this.swverLabel.Name = "swverLabel";
-            this.swverLabel.Size = new System.Drawing.Size(133, 17);
-            this.swverLabel.TabIndex = 47;
-            this.swverLabel.Text = "(Software ver. 1.00)";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.ClientSize = new System.Drawing.Size(948, 668);
+            this.ClientSize = new System.Drawing.Size(1005, 668);
+            this.Controls.Add(this.usagdetPanel);
+            this.Controls.Add(this.inputPanel);
             this.Controls.Add(this.swverLabel);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.swnameLabel);
             this.Controls.Add(this.helpPanel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.minimizebtn);
-            this.Controls.Add(this.outputsetPanel);
-            this.Controls.Add(this.chartPanel);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel4);
-            this.Controls.Add(this.inputPanel);
             this.Controls.Add(this.ComPanel);
             this.ForeColor = System.Drawing.Color.Transparent;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -1352,19 +1441,26 @@
             this.inputPanel.ResumeLayout(false);
             this.inputPanel.PerformLayout();
             this.inputsetPanel.ResumeLayout(false);
+            this.settinglimittlp.ResumeLayout(false);
+            this.settinglimittlp.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sllnumud)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slhnumud)).EndInit();
             this.inputsettlp.ResumeLayout(false);
             this.inputsettlp.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pvgainnumud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pvadjnumud)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.slhnumud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pvfilnumud)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sllnumud)).EndInit();
+            this.outputsetPanel.ResumeLayout(false);
+            this.polaritytlp.ResumeLayout(false);
+            this.polaritytlp.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inhnumud)).EndInit();
+            this.outputsettlp.ResumeLayout(false);
+            this.outputsettlp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inlnumud)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inhnumud)).EndInit();
             this.panel4.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1375,16 +1471,20 @@
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.outputChart)).EndInit();
-            this.chartPanel.ResumeLayout(false);
-            this.outputsetPanel.ResumeLayout(false);
-            this.outputsettlp.ResumeLayout(false);
-            this.outputsettlp.PerformLayout();
             this.helpPanel.ResumeLayout(false);
             this.helpPanel.PerformLayout();
             this.panel8.ResumeLayout(false);
             this.panel8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.usagdetPanel.ResumeLayout(false);
+            this.usagdetPanel.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wiringpicbox)).EndInit();
+            this.deviceinfotlp.ResumeLayout(false);
+            this.deviceinfotlp.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1436,7 +1536,6 @@
         private System.Windows.Forms.Label cojheadLabel;
         private System.Windows.Forms.Label cojLabel;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Timer timerchart;
         private System.Windows.Forms.Label swLabel;
         private System.Windows.Forms.Label invLabel;
         private System.Windows.Forms.Label inhLabel;
@@ -1447,22 +1546,17 @@
         private System.Windows.Forms.NumericUpDown inlnumud;
         private System.Windows.Forms.NumericUpDown slhnumud;
         private System.Windows.Forms.NumericUpDown sllnumud;
-        private System.Windows.Forms.DataVisualization.Charting.Chart outputChart;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label pvLabel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Label polarityLabel;
-        private System.Windows.Forms.Button runButton;
         private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.RadioButton noninvertrdb;
         private System.Windows.Forms.RadioButton invertrdb;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Panel chartPanel;
-        private System.Windows.Forms.Button clrchartbtn;
-        private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar configloadprgbar;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Label outputsetLabel;
@@ -1477,11 +1571,26 @@
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label helppanelhead;
         private System.Windows.Forms.Label swnameLabel;
-        private System.Windows.Forms.Button readalwbtn;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label swverLabel;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel usagdetPanel;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label devinfoLabel;
+        private System.Windows.Forms.TableLayoutPanel settinglimittlp;
+        private System.Windows.Forms.TableLayoutPanel polaritytlp;
+        private System.Windows.Forms.PictureBox wiringpicbox;
+        private System.Windows.Forms.Label wiringLabel;
+        private System.Windows.Forms.TableLayoutPanel deviceinfotlp;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label prodIDLabel;
+        private System.Windows.Forms.TextBox actionTextBox;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Label pleaseclickLabel;
     }
 }
 

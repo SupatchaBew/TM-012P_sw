@@ -12,6 +12,7 @@ using Modbus_Poll_CS;
 using System.Threading;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
+using TM_012P_Setup_Program.Properties;
 
 namespace TM_012P_Setup_Program
 {
@@ -20,7 +21,8 @@ namespace TM_012P_Setup_Program
         private static modbus mb = new modbus();
         public static Thread sampleThread1;
         public static int timecount = 0;
-        Int16 tdomain;
+
+        private static int device_model = 0; //0=TC. 1=R
         Byte pv1;
         Byte pv2;
         Byte pv3;
@@ -31,17 +33,17 @@ namespace TM_012P_Setup_Program
         private static bool _mbissent = false;
         private static bool _mbisread = false;
 
-        short[] inputselect = new short[1];
-        short[] pvgainselect = new short[1];
-        short[] pvadjselect = new short[1];
-        short[] pvfilselect = new short[1];
-        short[] cfselect = new short[1];
-        short[] sllselect = new short[1];
-        short[] slhselect = new short[1];
-        short[] invselect = new short[1];
-        short[] inlselect = new short[1];
-        short[] inhselect = new short[1];
-        short[] defaultset = new short[1];
+        short inputselect;
+        short pvgainselect;
+        short pvadjselect;
+        short pvfilselect;
+        short cfselect;
+        short sllselect;
+        short slhselect;
+        short invselect;
+        short inlselect;
+        short inhselect;
+        short defaultset;
 
         bool input_change = false;
         bool pvgain_change = false;
@@ -53,7 +55,21 @@ namespace TM_012P_Setup_Program
         bool inv_change = false;
         bool inl_change = false;
         bool inh_change = false;
-        bool default_set = false;
+
+        Decimal pvgain_min = 9.00M;
+        Decimal pvgain_max = 1.20M;
+        Decimal pvadj_min = 0.0M;
+        Decimal pvadj_max = 999.9M;
+        Decimal pvfil_min = 1M;
+        Decimal pvfil_max = 32M;
+        Decimal sll_min;
+        Decimal sll_max;
+        Decimal slh_min;
+        Decimal slh_max;
+        Decimal inl_min = 4.00M;
+        Decimal inl_max = 20.00M;
+        Decimal inh_min = 4.00M;
+        Decimal inh_max = 20.00M;
 
         Int32 pv;
         Int16 input;
@@ -66,36 +82,24 @@ namespace TM_012P_Setup_Program
         public Form1()
         {
             InitializeComponent();
-            Get_SerialPort();
             Init_settingBox();
-            Initchart();
-            deg_crdb.CheckedChanged += new EventHandler(degreeradioButtons_CheckedChanged);
-            deg_frdb.CheckedChanged += new EventHandler(degreeradioButtons_CheckedChanged);
-            pvgainnumud.ValueChanged += new System.EventHandler(pvgainnumud_ValueChanged);
-            pvadjnumud.ValueChanged += new System.EventHandler(pvadjnumud_ValueChanged);
-            pvfilnumud.ValueChanged += new System.EventHandler(pvfilnumud_ValueChanged);
-            invertrdb.CheckedChanged += new System.EventHandler(polarrdb_CheckedChanged);
-            noninvertrdb.CheckedChanged += new System.EventHandler(polarrdb_CheckedChanged);
-            sllnumud.ValueChanged += new System.EventHandler(sllnumud_ValueChanged);
-            slhnumud.ValueChanged += new System.EventHandler(slhnumud_ValueChanged);
-            inlnumud.ValueChanged += new System.EventHandler(inlnumud_ValueChanged);
-            inhnumud.ValueChanged += new System.EventHandler(inhnumud_ValueChanged);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
-
         }
         void Get_SerialPort()
         {
+            deviceBox.Items.Clear();
             String[] devicePort = SerialPort.GetPortNames();
             deviceBox.Items.AddRange(devicePort);
         }
         void Init_settingBox()
         {
+            pleaseclickLabel.Text = "Please click connect....";
             //initial input type 
-            System.Object[] input_type = new System.Object[8];
+            System.Object[] input_type = new System.Object[9];
             input_type[0] = "TC-K";
             input_type[1] = "TC-J";
             input_type[2] = "TC-R";
@@ -104,6 +108,7 @@ namespace TM_012P_Setup_Program
             input_type[5] = "TC-S";
             input_type[6] = "TC-E";
             input_type[7] = "PT100";
+            input_type[8] = "Resistor";
             inputBox.Items.AddRange(input_type);
             //initial input setting limit
             sllnumud.Maximum = 9999.9M;
@@ -111,12 +116,13 @@ namespace TM_012P_Setup_Program
             slhnumud.Maximum = 9999.9M;
             slhnumud.Minimum = -999.9M;
             //initial output limit
-            inlnumud.Maximum = 20.00M;
-            inlnumud.Minimum = 4.00M;
-            inhnumud.Maximum = 20.00M;
-            inhnumud.Minimum = 4.00M;
+            inlnumud.Maximum = 100.00M;
+            inlnumud.Minimum = 0.00M;
+            inhnumud.Maximum = 100.00M;
+            inhnumud.Minimum = 0.00M;
 
-            //initial timer
+            //initial picbox
+            wiringpicbox.Visible = false;
 
         }
         public static bool connected
@@ -145,15 +151,16 @@ namespace TM_012P_Setup_Program
                 {
                     if (mb.Open(deviceBox.Text, 9600, 8, Parity.None, StopBits.One))
                     {
+                        Enable_Panel();
                         connectButton.Text = "Disconnect";
+                        pleaseclickLabel.Text = "";
+                        actionTextBox.Text += "TM-012P is connected\r\n";
                         pvLabel.ForeColor = Color.Turquoise;
                         outputLabel.ForeColor = Color.LightBlue;
                         cojLabel.ForeColor = Color.Turquoise;
                         _connected = true;
-                        timerchart.Enabled = true;
                         threadstart();
-
-
+                        Verifyuser_config();
                     }
                     else
                     {
@@ -166,21 +173,57 @@ namespace TM_012P_Setup_Program
                 //device_serialPort.Close();
                 if (mb.Close())
                 {
+                    Disble_Panel();
                     _connected = false;
                     _mbisread = false;
-                    timerchart.Enabled = false;
                     //threadstart();
+                    prodIDLabel.Text = "";
                     connectButton.Text = "Connect";
+                    pleaseclickLabel.Text = "Please click connect....";
+                    actionTextBox.Text += "TM-012P is disconnected\r\n";
                     swLabel.Text = "";
                     pvLabel.ForeColor = Color.DarkGray;
                     outputLabel.ForeColor = Color.DarkGray;
                     cojLabel.ForeColor = Color.DarkGray;
+                    
                 }
                 else
                 {
                     MessageBox.Show("Can not close communication, device might be unplugged", "Communication failed", MessageBoxButtons.OK);
                 }
             }
+        }
+        private void Enable_Panel()
+        {
+            wiringpicbox.Visible = true;
+            inputBox.Enabled = true;
+            deg_crdb.Enabled = true;
+            deg_frdb.Enabled = true;
+            pvgainnumud.Enabled = true;
+            pvadjnumud.Enabled = true;
+            pvfilnumud.Enabled = true;
+            slhnumud.Enabled = true;
+            sllnumud.Enabled = true;
+            invertrdb.Enabled = true;
+            noninvertrdb.Enabled = true;
+            inhnumud.Enabled = true;
+            inlnumud.Enabled = true;
+        }
+        private void Disble_Panel()
+        {
+            wiringpicbox.Visible = false;
+            inputBox.Enabled = false;
+            deg_crdb.Enabled = false;
+            deg_frdb.Enabled = false;
+            pvgainnumud.Enabled = false;
+            pvadjnumud.Enabled = false;
+            pvfilnumud.Enabled = false;
+            slhnumud.Enabled = false;
+            sllnumud.Enabled = false;
+            invertrdb.Enabled = false;
+            noninvertrdb.Enabled = false;
+            inhnumud.Enabled = false;
+            inlnumud.Enabled = false;
         }
         #endregion
 
@@ -220,6 +263,7 @@ namespace TM_012P_Setup_Program
                 
                 if (Path.GetExtension(configfile.FileName) == ".bin")
                 {
+                    actionTextBox.Text += "loading file" + configfile.FileName + "\r\n";
                     Disable_event();
                     _mbissent = true;
                     configloadprgbar.Increment(20);
@@ -245,37 +289,50 @@ namespace TM_012P_Setup_Program
                             mb.SendFc6(1, 8, 1);
                             break;
                     }
-                    pvgainnumud.Value = br.ReadInt32();
-                    mb.SendFc6(1, 5, (short)pvgainnumud.Value);
+                    pvgainselect = (short)(br.ReadInt32());
+                    pvgainnumud.Value = pvgainselect / 100.00M;
+                    mb.SendFc6(1, 5, pvgainselect);
+
+                    pvadjselect = (short)(br.ReadInt32());
+                    pvadjnumud.Value = pvadjselect / 10.0M;
+                    mb.SendFc6(1, 6, pvadjselect);
                     pvfilnumud.Value = br.ReadInt32();
-                    mb.SendFc6(1, 6, (short)pvfilnumud.Value);
-                    pvadjnumud.Value = br.ReadInt32();
-                    mb.SendFc6(1, 7, (short)pvadjnumud.Value);
+                    mb.SendFc6(1, 7, (short)pvfilnumud.Value);
 
-                    sllselect[0] = (short)br.ReadInt32();
-                    sllnumud.Value = sllselect[0] / 10.0M;
-                    mb.SendFc6(1, 10, sllselect[0]);
+                    sllselect = (short)br.ReadInt32();
+                    slhselect = (short)br.ReadInt32();
+                    if (device_model == 1)
+                    {                        
+                        sllnumud.Value = sllselect;
+                        mb.SendFc6(1, 10, sllselect);
+                       
+                        slhnumud.Value = slhselect;
+                        mb.SendFc6(1, 9, slhselect);
+                    }
+                    else
+                    {
+                        sllnumud.Value = sllselect / 10.0M;
+                        mb.SendFc6(1, 10, sllselect);
 
-                    slhselect[0] = (short)br.ReadInt32();
-                    slhnumud.Value = slhselect[0] / 10.0M;
-                    mb.SendFc6(1, 9, slhselect[0]);
+                        slhnumud.Value = slhselect / 10.0M;
+                        mb.SendFc6(1, 9, slhselect);
+                    }
+                    inlselect = (short)br.ReadInt32();
+                    inlnumud.Value = inlselect / 100.0M;
+                    mb.SendFc6(1, 13, inlselect);
 
-                    inlselect[0] = (short)br.ReadInt32();
-                    inlnumud.Value = inlselect[0] / 100.0M;
-                    mb.SendFc6(1, 13, inlselect[0]);
-
-                    inhselect[0] = (short)br.ReadInt32();
-                    inhnumud.Value = inhselect[0] / 100.0M;
-                    mb.SendFc6(1, 12, inhselect[0]);
+                    inhselect = (short)br.ReadInt32();
+                    inhnumud.Value = inhselect / 100.0M;
+                    mb.SendFc6(1, 12, inhselect);
                     switch (br.ReadInt32())
                     {
                         case 0:
-                            invertrdb.Checked = true;
+                            noninvertrdb.Checked = true;
                             polarityLabel.Text = "Noninverting";
                             mb.SendFc6(1, 11, 0);
                             break;
                         case 1:
-                            noninvertrdb.Checked = true;
+                            invertrdb.Checked = true;
                             polarityLabel.Text = "Inverting";
                             mb.SendFc6(1, 11, 1);
                             break;
@@ -284,8 +341,7 @@ namespace TM_012P_Setup_Program
                     Enable_event();
                     _mbissent = false;               
                     configloadprgbar.Increment(20);
-                    statusLabel.ForeColor = Color.Turquoise;
-                    statusLabel.Text = "Done Loading";
+                    actionTextBox.Text +=  "Done loading\r\n";
                     configloadprgbar.Value = 0;
                     //threadstart();
                 }
@@ -315,6 +371,7 @@ namespace TM_012P_Setup_Program
                 }
                 FileStream configfs = new FileStream(scf.FileName, FileMode.Create);
                 BinaryWriter bw = new BinaryWriter(configfs);
+                actionTextBox.Text += "Saving file :" + scf.FileName + "\r\n";
                 //-----write number to binary file-----//
                 bw.Write(Convert.ToInt32(inputBox.SelectedIndex));
                 if (deg_crdb.Checked == true)
@@ -325,11 +382,20 @@ namespace TM_012P_Setup_Program
                 {
                     bw.Write(Convert.ToInt32(1));
                 }
-                bw.Write(Convert.ToInt32(pvgainnumud.Value));
+                bw.Write(Convert.ToInt32(pvgainnumud.Value * 100.00M));
+                bw.Write(Convert.ToInt32(pvadjnumud.Value * 10.0M));
                 bw.Write(Convert.ToInt32(pvfilnumud.Value));
-                bw.Write(Convert.ToInt32(pvadjnumud.Value));
-                bw.Write(Convert.ToInt32(sllnumud.Value * 10.0M));
-                bw.Write(Convert.ToInt32(slhnumud.Value * 10.0M));
+
+                if (device_model == 1)
+                {
+                    bw.Write(Convert.ToInt32(sllnumud.Value));
+                    bw.Write(Convert.ToInt32(slhnumud.Value));
+                }
+                else
+                {
+                    bw.Write(Convert.ToInt32(sllnumud.Value * 10.0M));
+                    bw.Write(Convert.ToInt32(slhnumud.Value * 10.0M));
+                }
                 bw.Write(Convert.ToInt32(inlnumud.Value * 100.0M));
                 bw.Write(Convert.ToInt32(inhnumud.Value * 100.0M));
                 if (invertrdb.Checked == true)
@@ -343,8 +409,8 @@ namespace TM_012P_Setup_Program
 
                 bw.Close();
                 configfs.Close();
-                statusLabel.ForeColor = Color.Turquoise;
-                statusLabel.Text = "Done Saving file!";
+                actionTextBox.Text += "Done saving\r\n";
+                MessageBox.Show("Saving succeed!", "Save config file", MessageBoxButtons.OK);
 
             }
         }
@@ -357,32 +423,23 @@ namespace TM_012P_Setup_Program
             Thread read_device_Thread = new Thread(new ThreadStart(Read_device_Thread));
             if (connected)
             {
-                inputBox.SelectionChangeCommitted -= new System.EventHandler(inputBox_SelectionChangeCommitted);
-                deg_crdb.CheckedChanged -= new EventHandler(degreeradioButtons_CheckedChanged);
-                deg_frdb.CheckedChanged -= new EventHandler(degreeradioButtons_CheckedChanged);
-                pvgainnumud.ValueChanged -= new System.EventHandler(pvgainnumud_ValueChanged);
-                pvadjnumud.ValueChanged -= new System.EventHandler(pvadjnumud_ValueChanged);
-                pvfilnumud.ValueChanged -= new System.EventHandler(pvfilnumud_ValueChanged);
-                invertrdb.CheckedChanged -= new System.EventHandler(polarrdb_CheckedChanged);
-                noninvertrdb.CheckedChanged -= new System.EventHandler(polarrdb_CheckedChanged);
-                sllnumud.ValueChanged -= new System.EventHandler(sllnumud_ValueChanged);
-                slhnumud.ValueChanged -= new System.EventHandler(slhnumud_ValueChanged);
-                inlnumud.ValueChanged -= new System.EventHandler(inlnumud_ValueChanged);
-                inhnumud.ValueChanged -= new System.EventHandler(inhnumud_ValueChanged);
+                Disable_event();
+                mb.SendFc4(1, 265, 1, ref values);
+                switch (values[0])
+                {
+                    default:
+                    case 0:
+                        prodIDLabel.Text = "TM-012P-TC";
+                        device_model = 0;
+                        break;
+                    case 1:
+                        prodIDLabel.Text = "TM-012P-R";
+                        device_model = 1;
+                        break;
+                }
                 mb.SendFc4(1, 0, 16, ref values);
                 SetText(values);
-                inputBox.SelectionChangeCommitted += new System.EventHandler(inputBox_SelectionChangeCommitted);
-                deg_crdb.CheckedChanged += new EventHandler(degreeradioButtons_CheckedChanged);
-                deg_frdb.CheckedChanged += new EventHandler(degreeradioButtons_CheckedChanged);
-                pvgainnumud.ValueChanged += new System.EventHandler(pvgainnumud_ValueChanged);
-                pvadjnumud.ValueChanged += new System.EventHandler(pvadjnumud_ValueChanged);
-                pvfilnumud.ValueChanged += new System.EventHandler(pvfilnumud_ValueChanged);
-                invertrdb.CheckedChanged += new System.EventHandler(polarrdb_CheckedChanged);
-                noninvertrdb.CheckedChanged += new System.EventHandler(polarrdb_CheckedChanged);
-                sllnumud.ValueChanged += new System.EventHandler(sllnumud_ValueChanged);
-                slhnumud.ValueChanged += new System.EventHandler(slhnumud_ValueChanged);
-                inlnumud.ValueChanged += new System.EventHandler(inlnumud_ValueChanged);
-                inhnumud.ValueChanged += new System.EventHandler(inhnumud_ValueChanged);
+                Enable_event();
                 //Thread.Sleep(200);
                 read_device_Thread.Start();
             }
@@ -393,7 +450,6 @@ namespace TM_012P_Setup_Program
         }
         public void Read_device_Thread()
         {
-
             while (connected)
             {
                 if(!mbissent)
@@ -434,12 +490,16 @@ namespace TM_012P_Setup_Program
                 }
                 else
                 {
-                    this.pvLabel.Text = ((pv) / 10.0).ToString("0.0");
+                    if (device_model == 1)
+                    {
+                        this.pvLabel.Text = (pv).ToString("0.0");
+                    }
+                    else
+                    {
+                        this.pvLabel.Text = ((pv) / 10.0).ToString("0.0");
+                    }
                 }
-
                 this.outputLabel.Text = (((float)values[2]) / 100.00).ToString("0.00");
-                this.Plotchart((float)values[2] / 100.00);
-  
                 this.cojLabel.Text = (((float)values[4]) / 10.0).ToString("0.0");
 
 
@@ -448,11 +508,12 @@ namespace TM_012P_Setup_Program
         private void SetText(short[] values)
         {
             inputBox.SelectedIndex = values[3];
-            this.pvgainnumud.Value = values[5];
-            this.pvadjnumud.Value = values[6];
+            this.pvgainnumud.Value = (decimal)values[5]/100.00M;
+            this.pvadjnumud.Value = (decimal)values[6]/10.0M;
             this.pvfilnumud.Value = values[7];
             switch (values[8])
             {
+                default:
                 case 0:
                     this.deg_crdb.Checked = true;
                     this.inunitLabel.Text = "°C";
@@ -464,10 +525,20 @@ namespace TM_012P_Setup_Program
             }
             slh = values[9];
             sll = values[10];
-            this.slhnumud.Value = (decimal)slh / 10.0M;
-            this.slhvalueLabel.Text = (slh / 10.0).ToString("0.0");
-            this.sllnumud.Value = (decimal)sll / 10.0M;
-            this.sllvalueLabel.Text = (sll / 10.0).ToString("0.0");
+            if(device_model == 1)
+            {
+                this.slhnumud.Value = (decimal)slh;
+                this.slhvalueLabel.Text = slh.ToString("0.0");
+                this.sllnumud.Value = (decimal)sll;
+                this.sllvalueLabel.Text = sll.ToString("0.0");
+            }
+            else
+            {
+                this.slhnumud.Value = (decimal)slh / 10.0M;
+                this.slhvalueLabel.Text = (slh / 10.0).ToString("0.0");
+                this.sllnumud.Value = (decimal)sll / 10.0M;
+                this.sllvalueLabel.Text = (sll / 10.0).ToString("0.0");
+            }
 
             inv = values[11];
             switch (inv)
@@ -487,125 +558,275 @@ namespace TM_012P_Setup_Program
             this.inhvalueLabel.Text = (inh / 100.00).ToString("0.00");
             this.inlnumud.Value = (decimal)inl / 100.0M;
             this.inlvalueLabel.Text = (inl / 100.00).ToString("0.00");
-            this.swLabel.Text = $"Firmware version : " + (values[14]/100.00M).ToString("0.00") + " (latest ver.)";
+            this.swLabel.Text = (values[14]/100.00M).ToString("0.00");
 
         }
         #endregion
 
-        private void Plotchart(double yplot)
+        #region user.config checking
+        private void Saveuser_config()
         {
-            if (timecount >= 1)
+            Settings.Default.input = (short)inputBox.SelectedIndex;
+            if(deg_crdb.Checked && !deg_frdb.Checked)
             {
-                timecount = 0;
-                tdomain++;
-                if (tdomain > 10)
+                Settings.Default.c_f = 0;
+            }
+            else
+            {
+                Settings.Default.c_f = 1;
+            }
+            Settings.Default.pvgain = pvgainnumud.Value;
+            Settings.Default.pvadj = pvadjnumud.Value;
+            Settings.Default.pvfil = pvfilnumud.Value;
+            Settings.Default.slh = slhnumud.Value;
+            Settings.Default.sll = sllnumud.Value;
+            if (noninvertrdb.Checked && !invertrdb.Checked)
+            {
+                Settings.Default.inv = 0;
+            }
+            else
+            {
+                Settings.Default.inv = 1;
+            }
+            Settings.Default.inh = inhnumud.Value;
+            Settings.Default.inl = inlnumud.Value;
+            Settings.Default.swver = "1.00";
+            Settings.Default.Save();
+        }
+        private void Verifyuser_config()
+        {
+            int degc_f;
+            if (deg_crdb.Checked && !deg_frdb.Checked)
+            {
+                degc_f = 0;
+            }
+            else
+            {
+                degc_f = 1;
+            }
+            int _invrbt;
+            if (noninvertrdb.Checked && !invertrdb.Checked)
+            {
+                _invrbt = 0;
+            }
+            else
+            {
+                _invrbt = 1;
+            }
+            if (Settings.Default.input != inputBox.SelectedIndex 
+                || Settings.Default.c_f != degc_f 
+                || Settings.Default.pvgain != pvgainnumud.Value 
+                || Settings.Default.pvadj != pvadjnumud.Value 
+                || Settings.Default.pvfil != pvfilnumud.Value 
+                || Settings.Default.slh != slhnumud.Value 
+                || Settings.Default.sll != sllnumud.Value 
+                || Settings.Default.inv != _invrbt 
+                || Settings.Default.inh != inhnumud.Value 
+                || Settings.Default.inl != inlnumud.Value 
+                || Settings.Default.swver != swLabel.Text)
+            {
+                if(MessageBox.Show("Click Yes to config device with last setting", "This device is not set to last config", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    outputChart.ChartAreas[0].AxisX.Maximum = tdomain;
-                    outputChart.ChartAreas[0].AxisX.Minimum = tdomain - 10;
-                    outputChart.ChartAreas[0].AxisX.ScaleView.Zoom(tdomain - 10, tdomain);
-                    outputChart.Series[0].Points.AddXY(tdomain, yplot);
-
-                }
-                else
-                {
-                    outputChart.Series[0].Points.AddXY(tdomain, yplot);
+                    _mbissent = true;
+                    Disable_event();
+                    configloadprgbar.Increment(25);
+                    Thread.Sleep(500);
+                    configloadprgbar.Increment(25);
+                    if (Settings.Default.input != inputBox.SelectedIndex)
+                    {
+                        mb.SendFc6(1, 3, Settings.Default.input);
+                    }
+                    if (Settings.Default.pvgain != pvgainnumud.Value)
+                    {
+                        mb.SendFc6(1, 5, (short)Settings.Default.pvgain);
+                    }
+                    if (Settings.Default.pvadj != pvadjnumud.Value)
+                    {
+                        mb.SendFc6(1, 6, (short)Settings.Default.pvadj);
+                    }
+                    if (Settings.Default.pvfil != pvfilnumud.Value)
+                    {
+                        mb.SendFc6(1, 7, (short)Settings.Default.pvfil);
+                    }
+                    if (Settings.Default.c_f != degc_f)
+                    {
+                        mb.SendFc6(1, 8, (short)Settings.Default.c_f);
+                    }
+                    if (Settings.Default.sll != sllnumud.Value)
+                    {
+                        if(device_model == 1)
+                        {
+                            mb.SendFc6(1, 10, (short)Settings.Default.sll);
+                        }
+                        else
+                        {
+                            mb.SendFc6(1, 10, (short)(Settings.Default.sll * 10.0M));
+                        }
+                    }
+                    if (Settings.Default.slh != slhnumud.Value)
+                    {
+                        if (device_model == 1)
+                        {
+                            mb.SendFc6(1, 9, (short)Settings.Default.slh);
+                        }
+                        else
+                        {
+                            mb.SendFc6(1, 9, (short)(Settings.Default.slh * 10.0M));
+                        }
+                    }
+                    if (Settings.Default.inv != _invrbt)
+                    {
+                        mb.SendFc6(1, 11, (short)Settings.Default.inv);
+                    }
+                    if (Settings.Default.inl != inlnumud.Value)
+                    {
+                        mb.SendFc6(1, 13, (short)(Settings.Default.inl*100.0M));
+                    }
+                    if (Settings.Default.inh != inhnumud.Value)
+                    {
+                        mb.SendFc6(1, 12, (short)(Settings.Default.inh*100.0M));
+                    }
+                    configloadprgbar.Increment(25);
+                    mb.SendFc4(1, 0, 16, ref values);
+                    SetText(values);
+                    Thread.Sleep(200);
+                    Enable_event();
+                    _mbissent = false;
+                    //threadstart();
+                    configloadprgbar.Increment(25);
+                    actionTextBox.AppendText("Done Applying last config \r\n");
+                    configloadprgbar.Value = 0;
+                    //sampleThread1.Start();
                 }
             }
         }
-        private void Initchart()
-        {
-            //initial chart
-            outputChart.ChartAreas[0].AxisY.ScaleView.Zoom(4.00, 20.00);
-            outputChart.ChartAreas[0].AxisX.ScaleView.Zoom(0, 10);
-            outputChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            outputChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            outputChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
-            outputChart.ChartAreas[0].AxisX.Maximum = 10;
-            outputChart.ChartAreas[0].AxisX.Minimum = 0;
-            outputChart.ChartAreas[0].AxisY.Maximum = 20.00;
-            outputChart.ChartAreas[0].AxisY.Minimum = 4.00;
-            outputChart.ChartAreas[0].AxisY.Interval = 4.00;
-            outputChart.ChartAreas[0].AxisX.ScrollBar.Enabled = false;
-            outputChart.ChartAreas[0].AxisY.ScrollBar.Enabled = false;
-
-            //StripLine sl0 = new StripLine();
-            //sl0.BackColor = Color.FromArgb(64, Color.LightSeaGreen);
-            //sl0.StripWidth = 4;
-            //sl0.IntervalOffset = 8;
-
-            //StripLine sl1 = new StripLine();
-            //sl1.BackColor = Color.FromArgb(64, Color.LightGoldenrodYellow);
-            //sl1.StripWidth = 4;
-            //sl1.IntervalOffset = 12;
-
-            //StripLine sl2 = new StripLine();
-            //sl2.BackColor = Color.FromArgb(64, Color.LightSalmon);
-            //sl2.StripWidth = 4;
-            //sl2.IntervalOffset = 16;
-
-            //outputChart.ChartAreas[0].AxisY.StripLines.Add(sl0);
-            //outputChart.ChartAreas[0].AxisY.StripLines.Add(sl1);
-            //outputChart.ChartAreas[0].AxisY.StripLines.Add(sl2);
-
-            outputChart.Series[0].Points.AddXY(0, 4);
-        }
-        private void runButton_Click(object sender, EventArgs e)
-        {
-            sllnumud.ValueChanged -= new System.EventHandler(sllnumud_ValueChanged);
-            slhnumud.ValueChanged -= new System.EventHandler(slhnumud_ValueChanged);
-            mb.SendFc4(1, 0, 16, ref values);
-            Showdata(values);
-            sllnumud.ValueChanged += new System.EventHandler(sllnumud_ValueChanged);
-            slhnumud.ValueChanged += new System.EventHandler(slhnumud_ValueChanged);
-        }
+        #endregion
 
         #region setting box change value -->> send modbus function6
         private void inputBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            inputselect[0] = (short)inputBox.SelectedIndex;
+            //Select_input_unit();
+            inputselect = (short)inputBox.SelectedIndex;
             input_change = true;
         }
-
+        private void Select_input_unit()
+        {
+            ///re-init sll, slh, 
+            if (deg_crdb.Checked && !deg_frdb.Checked)
+            {
+                switch (inputBox.SelectedIndex)
+                {
+                    case 0: //tc-k
+                        UpdatesettingLimit(-200.0M, 1372.0M);
+                        break;
+                    case 1: //tc-j
+                        UpdatesettingLimit(-200.0M, 1200.0M);
+                        break;
+                    case 2: //tc-n
+                        UpdatesettingLimit(-200.0M, 1300.0M);
+                        break;
+                    case 3: //tc-e
+                        UpdatesettingLimit(-200.0M, 1000.0M);
+                        break;
+                    case 4: //tc-t
+                        UpdatesettingLimit(-200.0M, 400.0M);
+                        break;
+                    case 5: //tc-r
+                        UpdatesettingLimit(-50.0M, 1768.0M);
+                        break;
+                    case 6: //tc-s
+                        UpdatesettingLimit(-50.0M, 1768.0M);
+                        break;
+                    case 7: // pt-100
+                        UpdatesettingLimit(-200.0M, 850.0M);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (inputBox.SelectedIndex)
+                {
+                    case 0: //tc-k
+                        UpdatesettingLimit(-328.0M, 2501.6M);
+                        break;
+                    case 1: //tc-j
+                        UpdatesettingLimit(-328.0M, 2192.0M);
+                        break;
+                    case 2: //tc-n
+                        UpdatesettingLimit(-328.0M, 2372.0M);
+                        break;
+                    case 3: //tc-e
+                        UpdatesettingLimit(-328.0M, 1832.0M);
+                        break;
+                    case 4: //tc-t
+                        UpdatesettingLimit(-328.0M, 752.0M);
+                        break;
+                    case 5: //tc-r
+                        UpdatesettingLimit(-58.0M, 3214.4M);
+                        break;
+                    case 6: //tc-s
+                        UpdatesettingLimit(-58.0M, 3214.4M);
+                        break;
+                    case 7: // pt-100
+                        UpdatesettingLimit(-328.0M, 1562.0M);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        private void UpdatesettingLimit(decimal min, decimal max)
+        {
+            sll_max = max;
+            sll_min = min;
+            sllnumud.Value = min;
+            slh_max = max;
+            slh_min = min;
+            slhnumud.Value = max;
+        }
         private void pvgainnumud_ValueChanged(object sender, EventArgs e)
         {
-            pvgainselect[0] = (short)pvgainnumud.Value;
-            pvgain_change = true;      
+            pvgainselect = (short)(pvgainnumud.Value*100);
+            pvgain_change = true;   
         }
 
         private void pvadjnumud_ValueChanged(object sender, EventArgs e)
         {
-            pvadjselect[0] = (short)pvadjnumud.Value;
+            pvadjselect = (short)(pvadjnumud.Value*10);
             pvadj_change = true;
         }
 
         private void pvfilnumud_ValueChanged(object sender, EventArgs e)
         {
-            pvfilselect[0] = (short)pvfilnumud.Value;
+            pvfilselect = (short)pvfilnumud.Value;
             pvfil_change = true;
         }
 
         private void degreeradioButtons_CheckedChanged(object sender, EventArgs e)
         {
-            if(deg_crdb.Checked == true)
+            Select_input_unit();
+            if (deg_crdb.Checked == true)
             {
-                cfselect[0] = 0;
+                cfselect = 0;
             }
             else
             {
-                cfselect[0] = 1;
+                cfselect = 1;
             }
             cf_change = true;
         }
 
         private void sllnumud_ValueChanged(object sender, EventArgs e)
         {
-            sllselect[0] = (short)(sllnumud.Value*10);
+            sllselect = (short)(sllnumud.Value*10);
             sll_change = true;
         }
 
         private void slhnumud_ValueChanged(object sender, EventArgs e)
         {
-            slhselect[0] = (short)(slhnumud.Value * 10);
+            slhselect = (short)(slhnumud.Value * 10);
             slh_change = true;
         }
 
@@ -613,24 +834,24 @@ namespace TM_012P_Setup_Program
         {
             if(invertrdb.Checked == true)
             {
-                invselect[0] = 1;
+                invselect = 1;
             }
             else
             {
-                invselect[0] = 0;
+                invselect = 0;
             }
             inv_change = true;
         }
 
         private void inlnumud_ValueChanged(object sender, EventArgs e)
         {
-            inlselect[0] = (short)(inlnumud.Value*100);
+            inlselect = (short)(inlnumud.Value*100);
             inl_change = true;
         }
 
         private void inhnumud_ValueChanged(object sender, EventArgs e)
         {
-            inhselect[0] = (short)(inhnumud.Value*100);
+            inhselect = (short)(inhnumud.Value*100);
             inh_change = true;
         }
         #endregion
@@ -654,10 +875,11 @@ namespace TM_012P_Setup_Program
                 SetText(values);
                 _mbissent = false;
 
-                configloadprgbar.Increment(25);
+                configloadprgbar.Increment(24);
                 Thread.Sleep(100);
-                statusLabel.ForeColor = Color.Turquoise;
-                statusLabel.Text = "Done Restoring device";
+                Saveuser_config();
+                actionTextBox.AppendText("Done Restoring device\r\n");
+                configloadprgbar.Increment(1);
                 configloadprgbar.Value = 0;
                 //threadstart();
             }
@@ -678,54 +900,145 @@ namespace TM_012P_Setup_Program
             {
                 if (input_change)
                 {
-                    mb.SendFc6(1, 3, inputselect[0]);
+                    if(inputBox.SelectedItem == inputBox.Items)
+                    {
+                        mb.SendFc6(1, 3, inputselect);
+                        actionTextBox.Text += "changing input " + inputBox.Text + "\r\n";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected Input type is incorrect, Please Select again");
+                    }
                     input_change = false;
                 }
                 if (pvgain_change)
                 {
-                    mb.SendFc6(1, 5, pvgainselect[0]);
+                    if(pvgainselect >= pvgain_min && pvgainselect <= pvgain_max)
+                    {
+                        mb.SendFc6(1, 5, pvgainselect);
+                        actionTextBox.Text += "changing pvgain " + pvgainselect + "\r\n";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected PV Gain is out of range, Please select again", "Selected PV Gain is out of range", MessageBoxButtons.OK);
+                    }
                     pvgain_change = false;
                 }
                 if (pvadj_change)
                 {
-                    mb.SendFc6(1, 6, pvadjselect[0]);
+                    if (pvadjselect >= pvadj_min && pvadjselect <= pvadj_max)
+                    {
+                        mb.SendFc6(1, 6, pvadjselect);
+                        actionTextBox.Text += "adjusting pv " + pvadjselect + "\r\n";   
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected PV Adjust is out of range, Please select again", "Selected PV Adj is out of range", MessageBoxButtons.OK);
+                    }
                     pvadj_change = false;
                 }
                 if (pvfil_change)
                 {
-                    mb.SendFc6(1, 7, pvfilselect[0]);
+                    if (pvfilselect >= pvfil_min && pvfilselect <= pvfil_max)
+                    {
+                        mb.SendFc6(1, 7, pvfilselect);
+                        actionTextBox.Text += "changing pv filter " + pvfilselect + "\r\n";                       
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected PV Filter is out of range, Please select again", "Selected PV Filer is out of range", MessageBoxButtons.OK);
+                    }
                     pvfil_change = false;
                 }
                 if(cf_change)
                 {
-                    mb.SendFc6(1, 8, cfselect[0]);
+                    mb.SendFc6(1, 8, cfselect);
+                    if(cfselect == 1)
+                    {
+                        actionTextBox.Text += "changing degree C to F \r\n";
+                    }
+                    else
+                    {
+                        actionTextBox.Text += "changing degree F to C \r\n";
+                    }                 
                     cf_change = false;
+                }
+                if(sll_change || slh_change)
+                {
+                    if(sllselect > slhselect)
+                    {
+                        sll_change = false;
+                        slh_change = false;
+                        MessageBox.Show("Setting limit low must not be higher than Setting limit high, Please select again", "sll is higher than slh", MessageBoxButtons.OK);
+                    }
                 }
                 if (sll_change)
                 {
-                    mb.SendFc6(1, 10, sllselect[0]);
+                    if ((sllselect/10.0M) >= sll_min && (sllselect/10.0M) <= sll_max)
+                    {
+                        mb.SendFc6(1, 10, sllselect);
+                        actionTextBox.Text += "changing setting limit low =" + sllselect + "\r\n";                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected setting limit low is out of range, Please select again", "Selected setting limit low is out of range", MessageBoxButtons.OK);
+                    }
                     sll_change = false;
                 }
                 if (slh_change)
                 {
-                    mb.SendFc6(1, 9, slhselect[0]);
+                    if ((slhselect/10.0M) >= slh_min && (slhselect/10.0M) <= slh_max)
+                    {
+                        mb.SendFc6(1, 9, slhselect);
+                        actionTextBox.Text += "changing setting limit high =" + slhselect + "\r\n";                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected setting limit high is out of range, Please select again", "Selected setting limit high is out of range", MessageBoxButtons.OK);
+                    }
                     slh_change = false;
                 }
                 if (inv_change)
                 {
-                    mb.SendFc6(1, 11, invselect[0]);
+                    mb.SendFc6(1, 11, invselect);
                     inv_change = false;
+                }
+                if (inl_change || inh_change)
+                {
+                    if (inlselect > inhselect)
+                    {
+                        inl_change = false;
+                        inh_change = false;
+                        MessageBox.Show("Output limit low must not be higher than Output limit high, Please select again", "inl is higher than inh", MessageBoxButtons.OK);
+                    }
                 }
                 if (inl_change)
                 {
-                    mb.SendFc6(1, 13, inlselect[0]);
+                    if ((inlselect/100.00M) >= inl_min && (inlselect/100.00M) <= inl_max)
+                    {
+                        mb.SendFc6(1, 13, inlselect);
+                        actionTextBox.Text += "changing output limit low =" + inlselect + "\r\n";                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected output limit low is out of range, Please select again", "Selected output limit low is out of range", MessageBoxButtons.OK);
+                    }
                     inl_change = false;
                 }
                 if (inh_change)
                 {
-                    mb.SendFc6(1, 12, inhselect[0]);
+                    if ((inhselect/100.00M) >= inh_min && (inhselect/100.00M) <= inh_max)
+                    {
+                        mb.SendFc6(1, 12, inhselect);
+                        actionTextBox.Text += "changing output limit high =" + inhselect + "\r\n";                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selected output limit high is out of range, Please select again", "Selected output limit high is out of range", MessageBoxButtons.OK);
+                    }
                     inh_change = false;
                 }
+                
                 configloadprgbar.Increment(25);
                 mb.SendFc4(1, 0, 16, ref values);
                 SetText(values);
@@ -733,27 +1046,13 @@ namespace TM_012P_Setup_Program
                 Enable_event();
                 _mbissent = false;
                 //threadstart();
-                configloadprgbar.Increment(25);
-                statusLabel.ForeColor = Color.Turquoise;
-                statusLabel.Text = "Done Applying";
+                configloadprgbar.Increment(24);
+                Saveuser_config();
+                actionTextBox.AppendText("Done Applying \r\n");
+                configloadprgbar.Increment(1);
                 configloadprgbar.Value = 0;
                 //sampleThread1.Start();
             }
-        }
-
-        private void timerchart_Tick(object sender, EventArgs e)
-        {
-            timecount++;
-        }
-
-        private void clrchartbtn_Click(object sender, EventArgs e)
-        {
-            outputChart.Series[0].Points.Clear();
-            outputChart.ChartAreas[0].AxisX.Maximum = 10;
-            outputChart.ChartAreas[0].AxisX.Minimum = 0;
-            tdomain = 0;
-            timecount = 0;
-            outputChart.Series[0].Points.AddXY(0, 4);
         }
 
         void Disable_event()
@@ -791,6 +1090,11 @@ namespace TM_012P_Setup_Program
         {
             if (MessageBox.Show("Are you sure to exit this program?", "Exit TM-012 software setup", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
+                _mbissent = true;
+                Thread.Sleep(200);
+                mb.Close();               
+                Disable_event();
+                Thread.Sleep(200);
                 Application.Exit();
             }
         }
@@ -802,26 +1106,33 @@ namespace TM_012P_Setup_Program
                 WindowState = FormWindowState.Minimized;
             }
         }
-        /* close form 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+
+        private void deviceBox_Click(object sender, EventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                DialogResult result = MessageBox.Show("Are you sure to exit this program?", "Exit TM-012 software setup", MessageBoxButtons.OKCancel);
-                if (result == DialogResult.Yes)
-                {
-                    Application.Exit();
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
-           }
-            else
-            {
-                e.Cancel = true;
-            }
+            Get_SerialPort();
         }
-        */
+
+
+        /* close form 
+private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+{
+   if (e.CloseReason == CloseReason.UserClosing)
+   {
+       DialogResult result = MessageBox.Show("Are you sure to exit this program?", "Exit TM-012 software setup", MessageBoxButtons.OKCancel);
+       if (result == DialogResult.Yes)
+       {
+           Application.Exit();
+       }
+       else
+       {
+           e.Cancel = true;
+       }
+  }
+   else
+   {
+       e.Cancel = true;
+   }
+}
+*/
     }
 }
