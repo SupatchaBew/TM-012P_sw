@@ -15,13 +15,13 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="pvfil" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="slh" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">13720</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="sll" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">-2000</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="inv" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -36,6 +36,9 @@
       <Value Profile="(Default)">1.00</Value>
     </Setting>
     <Setting Name="defaultset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="model" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

@@ -13,6 +13,8 @@ using System.Threading;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using TM_012P_Setup_Program.Properties;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace TM_012P_Setup_Program
 {
@@ -22,6 +24,7 @@ namespace TM_012P_Setup_Program
         public static Thread sampleThread1;
         public static int timecount = 0;
 
+        private decimal _decimalp;
         private static int device_model = 0; //0=TC. 1=R
         Byte pv1;
         Byte pv2;
@@ -30,6 +33,7 @@ namespace TM_012P_Setup_Program
         Byte[] pvByte;
         private static short[] values = new short[16];
         private static bool _connected = false;
+        private static bool _deviceisset = true;
         private static bool _mbissent = false;
         private static bool _mbisread = false;
 
@@ -56,11 +60,11 @@ namespace TM_012P_Setup_Program
         bool inl_change = false;
         bool inh_change = false;
 
-        Decimal pvgain_min = 9.00M;
+        Decimal pvgain_min = 0.90M;
         Decimal pvgain_max = 1.20M;
-        Decimal pvadj_min = 0.0M;
+        Decimal pvadj_min = -199.9M;
         Decimal pvadj_max = 999.9M;
-        Decimal pvfil_min = 1M;
+        Decimal pvfil_min = 0M;
         Decimal pvfil_max = 32M;
         Decimal sll_min;
         Decimal sll_max;
@@ -78,6 +82,15 @@ namespace TM_012P_Setup_Program
         Int16 inv;
         Int16 inl;
         Int16 inh;
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd,
+                         int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
 
         public Form1()
         {
@@ -129,6 +142,10 @@ namespace TM_012P_Setup_Program
         {
             get { return _connected; }
         }
+        public static bool deviceisset
+        {
+            get { return _deviceisset; }
+        }
         public bool mbissent
         {
             get { return _mbissent; }
@@ -145,7 +162,7 @@ namespace TM_012P_Setup_Program
             {
                 if (deviceBox.Text == "")
                 {
-                    MessageBox.Show("Please select device com port");
+                    MyMsgBox.Showmsg("Please select device com port", "Can't connect device", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
@@ -165,7 +182,8 @@ namespace TM_012P_Setup_Program
                     }
                     else
                     {
-                        MessageBox.Show("Failed to connect device or device com port not availble", "Communication failed", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Failed to connect device due to this issue \r\n - Com port is not availble\r\n" +
+                            " - Device is not powered up", "Communication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -190,7 +208,7 @@ namespace TM_012P_Setup_Program
                 }
                 else
                 {
-                    MessageBox.Show("Can not close communication, device might be unplugged", "Communication failed", MessageBoxButtons.OK);
+                    MyMsgBox.Showmsg("Can not disconnect, device might be unplugged", "Communication failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -237,7 +255,7 @@ namespace TM_012P_Setup_Program
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to open link that was clicked.");
+                MyMsgBox.Showmsg("Unable to open Primus website", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void VisitLink()
@@ -273,88 +291,95 @@ namespace TM_012P_Setup_Program
                     FileStream configreadfs = new FileStream(configfile.FileName, FileMode.Open, FileAccess.Read);
                     BinaryReader br = new BinaryReader(configreadfs);
                     configloadprgbar.Increment(20);
-                    //-----read number from binary file-----//             
-                    inputBox.SelectedIndex = br.ReadInt32();
-                    mb.SendFc6(1, 3, (short)inputBox.SelectedIndex);
-                    configloadprgbar.Increment(20);
-                    switch (br.ReadInt32())
+                    //-----read number from binary file-----//  
+                    //read binary to check device model
+                    if(device_model != br.ReadInt32())
                     {
-                        case 0:
-                            if (device_model == 0)
-                            {
-                                deg_crdb.Checked = true;
-                                inunitLabel.Text = "°C";
-                                mb.SendFc6(1, 8, 0);
-                            }
-                            break;
-                        case 1:
-                            if (device_model == 0)
-                            {
-                                deg_frdb.Checked = true;
-                                inunitLabel.Text = "°F";
-                                mb.SendFc6(1, 8, 1);
-                            }
-                            break;
-                    }
-                    pvgainselect = (short)(br.ReadInt32());
-                    pvgainnumud.Value = pvgainselect / 100.00M;
-                    mb.SendFc6(1, 5, pvgainselect);
-
-                    pvadjselect = (short)(br.ReadInt32());
-                    pvadjnumud.Value = pvadjselect / 10.0M;
-                    mb.SendFc6(1, 6, pvadjselect);
-                    pvfilnumud.Value = br.ReadInt32();
-                    mb.SendFc6(1, 7, (short)pvfilnumud.Value);
-
-                    sllselect = (int)br.ReadInt32();
-                    slhselect = (int)br.ReadInt32();
-                    if (device_model == 1)
-                    {                        
-                        sllnumud.Value = sllselect;
-                        mb.SendFc6(1, 10, sllselect);
-                       
-                        slhnumud.Value = slhselect;
-                        mb.SendFc6(1, 9, slhselect);
+                        MyMsgBox.Showmsg("You are loading config file that contains wrong device model, please select new file.", "Failed loading file!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        actionTextBox.Text += "Failed loading\r\n";
                     }
                     else
                     {
-                        sllnumud.Value = sllselect / 10.0M;
+                        inputBox.SelectedIndex = br.ReadInt32();
+                        mb.SendFc6(1, 3, (short)inputBox.SelectedIndex);
+                        configloadprgbar.Increment(20);
+                        switch (br.ReadInt32())
+                        {
+                            case 0:
+                                if (device_model == 0)
+                                {
+                                    deg_crdb.Checked = true;
+                                    inunitLabel.Text = "°C";
+                                    mb.SendFc6(1, 8, 0);
+                                }
+                                break;
+                            case 1:
+                                if (device_model == 0)
+                                {
+                                    deg_frdb.Checked = true;
+                                    inunitLabel.Text = "°F";
+                                    mb.SendFc6(1, 8, 1);
+                                }
+                                break;
+                        }
+                        pvgainselect = (short)(br.ReadInt32());
+                        pvgainnumud.Value = pvgainselect / 100.00M;
+                        mb.SendFc6(1, 5, pvgainselect);
+
+                        pvadjselect = (short)(br.ReadInt32());
+                        pvadjnumud.Value = pvadjselect / _decimalp;
+                        mb.SendFc6(1, 6, pvadjselect);
+                        pvfilnumud.Value = br.ReadInt32();
+                        mb.SendFc6(1, 7, (short)pvfilnumud.Value);
+
+                        sllselect = (int)br.ReadInt32();
+                        slhselect = (int)br.ReadInt32();
+
+                        sllnumud.Value = sllselect / _decimalp;
                         mb.SendFc6(1, 10, sllselect);
 
-                        slhnumud.Value = slhselect / 10.0M;
+                        slhnumud.Value = slhselect / _decimalp;
                         mb.SendFc6(1, 9, slhselect);
-                    }
-                    inlselect = (int)br.ReadInt32();
-                    inlnumud.Value = inlselect / 100.0M;
-                    mb.SendFc6(1, 13, inlselect);
 
-                    inhselect = (int)br.ReadInt32();
-                    inhnumud.Value = inhselect / 100.0M;
-                    mb.SendFc6(1, 12, inhselect);
-                    switch (br.ReadInt32())
-                    {
-                        case 0:
-                            noninvertrdb.Checked = true;
-                            polarityLabel.Text = "Noninverting";
-                            mb.SendFc6(1, 11, 0);
-                            break;
-                        case 1:
-                            invertrdb.Checked = true;
-                            polarityLabel.Text = "Inverting";
-                            mb.SendFc6(1, 11, 1);
-                            break;
+                        inlselect = (int)br.ReadInt32();
+                        inlnumud.Value = inlselect / 100.0M;
+                        mb.SendFc6(1, 13, inlselect);
+
+                        inhselect = (int)br.ReadInt32();
+                        inhnumud.Value = inhselect / 100.0M;
+                        mb.SendFc6(1, 12, inhselect);
+                        switch (br.ReadInt32())
+                        {
+                            case 0:
+                                noninvertrdb.Checked = true;
+                                polarityLabel.Text = "Noninverting";
+                                mb.SendFc6(1, 11, 0);
+                                break;
+                            case 1:
+                                invertrdb.Checked = true;
+                                polarityLabel.Text = "Inverting";
+                                mb.SendFc6(1, 11, 1);
+                                break;
+                        }
                     }
+                    Thread.Sleep(200);
+                    mb.SendFc4(1, 0, 16, ref values);
+                    SetText(values);
                     Thread.Sleep(200);
                     Enable_event();
                     _mbissent = false;               
-                    configloadprgbar.Increment(20);
+                    configloadprgbar.Increment(10);
+                    Saveuser_config();
+                    configloadprgbar.Increment(10);
+                    MyMsgBox.Showmsg("Loading config file is succeeded!", "Done!", MessageBoxButtons.OK, MessageBoxIcon.None);
                     actionTextBox.Text +=  "Done loading\r\n";
                     configloadprgbar.Value = 0;
                     //threadstart();
                 }
                 else
                 {
-                    MessageBox.Show("Wrong file type was selected, Please selecte again", "Wrong file type", MessageBoxButtons.OK);
+                    MyMsgBox.Showmsg("Wrong file type was selected, Please selecte again", "Wrong file type!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    actionTextBox.Text += "Failed loading\r\n";
                 }
 
             }
@@ -373,13 +398,14 @@ namespace TM_012P_Setup_Program
             {
                 if (Path.GetExtension(scf.FileName) != ".bin")
                 {
-                    MessageBox.Show("Warning you're saving with wrong file type, this file can not be used for configuration. " +
-                        "Please save it again with .bin type", "Wrong file type", MessageBoxButtons.OK);
+                    MyMsgBox.Showmsg("Warning you're saving with wrong file type, this file can not be used for configuration. " +
+                        "Please save it again with .bin type", "Wrong file type!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 FileStream configfs = new FileStream(scf.FileName, FileMode.Create);
                 BinaryWriter bw = new BinaryWriter(configfs);
                 actionTextBox.Text += "Saving file :" + scf.FileName + "\r\n";
                 //-----write number to binary file-----//
+                bw.Write(Convert.ToInt32(device_model));
                 bw.Write(Convert.ToInt32(inputBox.SelectedIndex));
                 if (deg_crdb.Checked == true)
                 {
@@ -397,19 +423,10 @@ namespace TM_012P_Setup_Program
                     }
                 }
                 bw.Write(Convert.ToInt32(pvgainnumud.Value * 100.00M));
-                bw.Write(Convert.ToInt32(pvadjnumud.Value * 10.0M));
+                bw.Write(Convert.ToInt32(pvadjnumud.Value * _decimalp));
                 bw.Write(Convert.ToInt32(pvfilnumud.Value));
-
-                if (device_model == 1)
-                {
-                    bw.Write(Convert.ToInt32(sllnumud.Value));
-                    bw.Write(Convert.ToInt32(slhnumud.Value));
-                }
-                else
-                {
-                    bw.Write(Convert.ToInt32(sllnumud.Value * 10.0M));
-                    bw.Write(Convert.ToInt32(slhnumud.Value * 10.0M));
-                }
+                bw.Write(Convert.ToInt32(sllnumud.Value * _decimalp));
+                bw.Write(Convert.ToInt32(slhnumud.Value * _decimalp));
                 bw.Write(Convert.ToInt32(inlnumud.Value * 100.0M));
                 bw.Write(Convert.ToInt32(inhnumud.Value * 100.0M));
                 if (invertrdb.Checked == true)
@@ -424,7 +441,8 @@ namespace TM_012P_Setup_Program
                 bw.Close();
                 configfs.Close();
                 actionTextBox.Text += "Done saving\r\n";
-                MessageBox.Show("Saving succeed!", "Save config file", MessageBoxButtons.OK);
+                MyMsgBox.Showmsg("Saving config file is succeeded!", "Done!", MessageBoxButtons.OK, MessageBoxIcon.None);
+                //MyMsgBox.Showmsg("Saving config file is succeed!", "Done");
 
             }
         }
@@ -461,7 +479,7 @@ namespace TM_012P_Setup_Program
                 }
                 catch
                 {
-                    MessageBox.Show("Can not connect device", "Problem with device connecting");
+                    MyMsgBox.Showmsg("Can not read device's registers, please check wiring and reconnect device ", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -511,14 +529,8 @@ namespace TM_012P_Setup_Program
                 }
                 else
                 {
-                    if (device_model == 1)
-                    {
-                        this.pvLabel.Text = (pv).ToString("0.0");
-                    }
-                    else
-                    {
-                        this.pvLabel.Text = ((pv) / 10.0).ToString("0.0");
-                    }
+                    this.pvLabel.Text = (pv).ToString("0");
+                    this.pvLabel.Text = ((pv) / _decimalp).ToString("0.0");
                 }
                 this.outputLabel.Text = (((float)values[2]) / 100.00).ToString("0.00");
                 if(device_model == 0)
@@ -537,9 +549,7 @@ namespace TM_012P_Setup_Program
             {
                 Select_input_unit();
                 inputBox.SelectedIndex = values[3];
-                this.pvgainnumud.Value = (decimal)values[5] / 100.00M;
-                this.pvadjnumud.Value = (decimal)values[6] / 10.0M;
-                this.pvfilnumud.Value = values[7];
+
                 switch (device_model)
                 {
                     default:
@@ -548,39 +558,49 @@ namespace TM_012P_Setup_Program
                         {
                             default:
                             case 0:
+                                
                                 this.deg_crdb.Checked = true;
                                 this.inunitLabel.Text = "°C";
                                 break;
                             case 1:
+                                this.pvadjnumud.Value = (decimal)values[6];
                                 this.deg_frdb.Checked = true;
                                 this.inunitLabel.Text = "°F";
                                 break;
                         }
+                        _decimalp = 10.0M;
+                        pvadjnumud.DecimalPlaces = 1;
+                        sllnumud.DecimalPlaces = 1;
+                        slhnumud.DecimalPlaces = 1;
+                        pvadjnumud.Increment = 0.1M;
+                        sllnumud.Increment = 0.1M;
+                        slhnumud.Increment = 0.1M;
                         inputBox.Enabled = true;
                         panel6.Enabled = true;
                         break;
                     case 1:
+                        _decimalp = 1.0M;
                         inputBox.Enabled = false;
+                        pvadjnumud.DecimalPlaces = 0;
+                        sllnumud.DecimalPlaces = 0;
+                        slhnumud.DecimalPlaces = 0;
+                        pvadjnumud.Increment = 1M;
+                        sllnumud.Increment = 1M;
+                        slhnumud.Increment = 1M;
                         this.inunitLabel.Text = "\u2126";
                         panel6.Enabled = false;
                         break;
                 }
+                this.pvgainnumud.Value = (decimal)values[5] / 100.00M;
+                this.pvadjnumud.Value = (decimal)values[6] / _decimalp;
+                this.pvfilnumud.Value = values[7];
                 slh = values[9];
                 sll = values[10];
-                if (device_model == 1)
-                {
-                    this.slhnumud.Value = (decimal)slh;
-                    this.slhvalueLabel.Text = slh.ToString("0.0");
-                    this.sllnumud.Value = (decimal)sll;
-                    this.sllvalueLabel.Text = sll.ToString("0.0");
-                }
-                else
-                {
-                    this.slhnumud.Value = (decimal)slh / 10.0M;
-                    this.slhvalueLabel.Text = (slh / 10.0).ToString("0.0");
-                    this.sllnumud.Value = (decimal)sll / 10.0M;
-                    this.sllvalueLabel.Text = (sll / 10.0).ToString("0.0");
-                }
+
+                this.slhnumud.Value = (decimal)slh / _decimalp;
+                this.slhvalueLabel.Text = (slh / _decimalp).ToString("0.0");
+                this.sllnumud.Value = (decimal)sll / _decimalp;
+                this.sllvalueLabel.Text = (sll / _decimalp).ToString("0.0");
 
                 inv = values[11];
                 switch (inv)
@@ -604,7 +624,7 @@ namespace TM_012P_Setup_Program
             }
             catch
             {
-                MessageBox.Show("Can not read modbus register", "Communication problem");
+                MyMsgBox.Showmsg("Can not read device's register, Please check wiring and reconnect device", "Communication problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -641,108 +661,98 @@ namespace TM_012P_Setup_Program
         }
         private void Verifyuser_config()
         {
-            int degc_f;
-            if (deg_crdb.Checked && !deg_frdb.Checked)
+            if(device_model == Settings.Default.model)
             {
-                degc_f = 0;
-            }
-            else
-            {
-                degc_f = 1;
-            }
-            int _invrbt;
-            if (noninvertrdb.Checked && !invertrdb.Checked)
-            {
-                _invrbt = 0;
-            }
-            else
-            {
-                _invrbt = 1;
-            }
-            if (Settings.Default.input != inputBox.SelectedIndex 
-                || Settings.Default.c_f != degc_f 
-                || Settings.Default.pvgain != pvgainnumud.Value 
-                || Settings.Default.pvadj != pvadjnumud.Value 
-                || Settings.Default.pvfil != pvfilnumud.Value 
-                || Settings.Default.slh != slhnumud.Value 
-                || Settings.Default.sll != sllnumud.Value 
-                || Settings.Default.inv != _invrbt 
-                || Settings.Default.inh != inhnumud.Value 
-                || Settings.Default.inl != inlnumud.Value 
-                || Settings.Default.swver != swLabel.Text)
-            {
-                if(MessageBox.Show("Click Yes to config device with last setting", "This device is not set to last config", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                int degc_f;
+                if (deg_crdb.Checked && !deg_frdb.Checked)
                 {
-                    _mbissent = true;
-                    Disable_event();
-                    configloadprgbar.Increment(25);
-                    Thread.Sleep(500);
-                    configloadprgbar.Increment(25);
-                    if (Settings.Default.input != inputBox.SelectedIndex)
+                    degc_f = 0;
+                }
+                else
+                {
+                    degc_f = 1;
+                }
+                int _invrbt;
+                if (noninvertrdb.Checked && !invertrdb.Checked)
+                {
+                    _invrbt = 0;
+                }
+                else
+                {
+                    _invrbt = 1;
+                }
+                if (Settings.Default.input != inputBox.SelectedIndex
+                    || Settings.Default.c_f != degc_f
+                    || Settings.Default.pvgain != pvgainnumud.Value
+                    || Settings.Default.pvadj != pvadjnumud.Value
+                    || Settings.Default.pvfil != pvfilnumud.Value
+                    || Settings.Default.slh != slhnumud.Value
+                    || Settings.Default.sll != sllnumud.Value
+                    || Settings.Default.inv != _invrbt
+                    || Settings.Default.inh != inhnumud.Value
+                    || Settings.Default.inl != inlnumud.Value
+                    || Settings.Default.swver != swLabel.Text)
+                {
+                    if (MyMsgBox.Showmsg("Click 'Yes' to config device with last setting", "This device is not set to last config", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
-                        mb.SendFc6(1, 3, Settings.Default.input);
-                    }
-                    if (Settings.Default.pvgain != pvgainnumud.Value)
-                    {
-                        mb.SendFc6(1, 5, (short)Settings.Default.pvgain);
-                    }
-                    if (Settings.Default.pvadj != pvadjnumud.Value)
-                    {
-                        mb.SendFc6(1, 6, (short)Settings.Default.pvadj);
-                    }
-                    if (Settings.Default.pvfil != pvfilnumud.Value)
-                    {
-                        mb.SendFc6(1, 7, (short)Settings.Default.pvfil);
-                    }
-                    if (Settings.Default.c_f != degc_f)
-                    {
-                        mb.SendFc6(1, 8, (short)Settings.Default.c_f);
-                    }
-                    if (Settings.Default.sll != sllnumud.Value)
-                    {
-                        if(device_model == 1)
+                        _mbissent = true;
+                        Disable_event();
+                        configloadprgbar.Increment(25);
+                        Thread.Sleep(500);
+                        configloadprgbar.Increment(25);
+                        if (Settings.Default.input != inputBox.SelectedIndex)
                         {
-                            mb.SendFc6(1, 10, (int)Settings.Default.sll);
+                            mb.SendFc6(1, 3, Settings.Default.input);
                         }
-                        else
+                        if (Settings.Default.pvgain != pvgainnumud.Value)
                         {
-                            mb.SendFc6(1, 10, (int)(Settings.Default.sll * 10.0M));
+                            mb.SendFc6(1, 5, (short)Settings.Default.pvgain);
                         }
-                    }
-                    if (Settings.Default.slh != slhnumud.Value)
-                    {
-                        if (device_model == 1)
+                        if (Settings.Default.pvadj != pvadjnumud.Value)
                         {
-                            mb.SendFc6(1, 9, (int)Settings.Default.slh);
+                            mb.SendFc6(1, 6, (short)Settings.Default.pvadj);
                         }
-                        else
+                        if (Settings.Default.pvfil != pvfilnumud.Value)
                         {
-                            mb.SendFc6(1, 9, (int)(Settings.Default.slh * 10.0M));
+                            mb.SendFc6(1, 7, (short)Settings.Default.pvfil);
                         }
+                        if (Settings.Default.c_f != degc_f)
+                        {
+                            mb.SendFc6(1, 8, (short)Settings.Default.c_f);
+                        }
+                        if (Settings.Default.sll != sllnumud.Value)
+                        {
+                           mb.SendFc6(1, 10, (int)(Settings.Default.sll * _decimalp));
+                        }
+                        if (Settings.Default.slh != slhnumud.Value)
+                        {
+                            mb.SendFc6(1, 9, (int)(Settings.Default.slh * _decimalp));
+                        }
+                        if (Settings.Default.inv != _invrbt)
+                        {
+                            mb.SendFc6(1, 11, (short)Settings.Default.inv);
+                        }
+                        if (Settings.Default.inl != inlnumud.Value)
+                        {
+                            mb.SendFc6(1, 13, (int)(Settings.Default.inl * 100.0M));
+                        }
+                        if (Settings.Default.inh != inhnumud.Value)
+                        {
+                            mb.SendFc6(1, 12, (int)(Settings.Default.inh * 100.0M));
+                        }
+                        configloadprgbar.Increment(25);
+                        mb.SendFc4(1, 0, 16, ref values);
+                        SetText(values);
+                        Thread.Sleep(200);
+                        Enable_event();
+                        _mbissent = false;
+                        //threadstart();
+                        configloadprgbar.Increment(25);
+                        actionTextBox.AppendText("Done Applying last config \r\n");
+                        configloadprgbar.Value = 0;
+                        //sampleThread1.Start();
                     }
-                    if (Settings.Default.inv != _invrbt)
-                    {
-                        mb.SendFc6(1, 11, (short)Settings.Default.inv);
-                    }
-                    if (Settings.Default.inl != inlnumud.Value)
-                    {
-                        mb.SendFc6(1, 13, (int)(Settings.Default.inl*100.0M));
-                    }
-                    if (Settings.Default.inh != inhnumud.Value)
-                    {
-                        mb.SendFc6(1, 12, (int)(Settings.Default.inh*100.0M));
-                    }
-                    configloadprgbar.Increment(25);
-                    mb.SendFc4(1, 0, 16, ref values);
-                    SetText(values);
-                    Thread.Sleep(200);
-                    Enable_event();
-                    _mbissent = false;
-                    //threadstart();
-                    configloadprgbar.Increment(25);
-                    actionTextBox.AppendText("Done Applying last config \r\n");
-                    configloadprgbar.Value = 0;
-                    //sampleThread1.Start();
+                    Saveuser_config();
                 }
             }
         }
@@ -759,7 +769,7 @@ namespace TM_012P_Setup_Program
         {
             if(device_model == 1)
             {
-                UpdatesettingLimit(0.0M, 5000.0M);
+                UpdatesettingLimit(0.0M, 5000.0M); // actual is 5000 ohms
             }
             else
             {
@@ -848,7 +858,7 @@ namespace TM_012P_Setup_Program
 
         private void pvadjnumud_ValueChanged(object sender, EventArgs e)
         {
-            pvadjselect = (short)(pvadjnumud.Value*10);
+            pvadjselect = (short)(pvadjnumud.Value*_decimalp);
             pvadj_change = true;
         }
 
@@ -874,27 +884,13 @@ namespace TM_012P_Setup_Program
 
         private void sllnumud_ValueChanged(object sender, EventArgs e)
         {
-            if(device_model == 1)
-            {
-                sllselect = (int)(sllnumud.Value);
-            }
-            else
-            {
-                sllselect = (int)(sllnumud.Value * 10);
-            }
+            sllselect = (int)(sllnumud.Value * _decimalp);
             sll_change = true;
         }
 
         private void slhnumud_ValueChanged(object sender, EventArgs e)
         {
-            if (device_model == 1)
-            {
-                slhselect = (int)(slhnumud.Value);
-            }
-            else
-            {
-                slhselect = (int)(slhnumud.Value * 10);
-            }
+            slhselect = (int)(slhnumud.Value * _decimalp);
             slh_change = true;
         }
 
@@ -925,7 +921,7 @@ namespace TM_012P_Setup_Program
         #endregion
         private void setdefButton_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Do you want to restore default settings?", "Restore default settings", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if(MyMsgBox.Showmsg("Your current configuration might be lost. Are you sure you want to restore default settings?", "Restore Device!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 _mbissent = true;
                 configloadprgbar.Increment(25);
@@ -946,7 +942,16 @@ namespace TM_012P_Setup_Program
                 configloadprgbar.Increment(24);
                 Thread.Sleep(100);
                 Saveuser_config();
-                actionTextBox.AppendText("Done Restoring device\r\n");
+                if (deviceisset != false)
+                {
+                    actionTextBox.AppendText("Done Restoring device\r\n");
+                    MyMsgBox.Showmsg("Restoring device is succeeded", "Done!", MessageBoxButtons.OK, MessageBoxIcon.None);
+                }
+                else
+                {
+                    actionTextBox.AppendText("Failed restoring device \r\n");
+                    _deviceisset = true;
+                }
                 configloadprgbar.Increment(1);
                 configloadprgbar.Value = 0;
                 //threadstart();
@@ -975,33 +980,38 @@ namespace TM_012P_Setup_Program
                     }
                     else
                     {
-                        MessageBox.Show("Selected Input type is incorrect, Please Select again", "Wrong type of selected input");
+                        MyMsgBox.Showmsg("Selected Input Type is incorrect, Please select agian", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //MyMsgBox.Showmsg("Selected Input type is incorrect, Please Select again", "Wrong type of selected input");
+                        _deviceisset = false;
                     }
                     input_change = false;
                 }
                 if (pvgain_change)
                 {
-                    if(pvgainselect >= pvgain_min && pvgainselect <= pvgain_max)
+                    if(pvgainselect/100.0M >= pvgain_min && pvgainselect/100.0M <= pvgain_max)
                     {
                         mb.SendFc6(1, 5, pvgainselect);
                         actionTextBox.Text += "changing pvgain " + pvgainselect + "\r\n";
                     }
                     else
                     {
-                        MessageBox.Show("Selected PV Gain is out of range, Please select again", "Selected PV Gain is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected PV Gain is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //MyMsgBox.Showmsg("Selected PV Gain is out of range, Please select again", "Selected PV Gain is out of range", MessageBoxButtons.OK);
+                        _deviceisset = false;
                     }
                     pvgain_change = false;
                 }
                 if (pvadj_change)
                 {
-                    if (pvadjselect >= pvadj_min && pvadjselect <= pvadj_max)
+                    if (pvadjselect/_decimalp >= pvadj_min && pvadjselect/_decimalp <= pvadj_max)
                     {
                         mb.SendFc6(1, 6, pvadjselect);
                         actionTextBox.Text += "adjusting pv " + pvadjselect + "\r\n";   
                     }
                     else
                     {
-                        MessageBox.Show("Selected PV Adjust is out of range, Please select again", "Selected PV Adj is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected PV Adjust is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                     pvadj_change = false;
                 }
@@ -1014,7 +1024,8 @@ namespace TM_012P_Setup_Program
                     }
                     else
                     {
-                        MessageBox.Show("Selected PV Filter is out of range, Please select again", "Selected PV Filer is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected PV Filter is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                     pvfil_change = false;
                 }
@@ -1036,36 +1047,40 @@ namespace TM_012P_Setup_Program
                 }
                 if(sll_change || slh_change)
                 {
-                    if(sllselect > slhselect)
+                    if(sllnumud.Value > slhnumud.Value)
                     {
                         sll_change = false;
                         slh_change = false;
-                        MessageBox.Show("Setting limit low must not be higher than Setting limit high, Please select again", "sll is higher than slh", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Setting limit low must be lower than Setting limit high, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //MyMsgBox.Showmsg("Setting limit low must not be higher than Setting limit high, Please select again", "sll is higher than slh", MessageBoxButtons.OK);
+                        _deviceisset = false;
                     }
                 }
                 if (sll_change)
                 {
-                    if ((sllselect/10.0M) >= sll_min && (sllselect/10.0M) <= sll_max)
+                    if ((sllselect/_decimalp) >= sll_min && (sllselect/_decimalp) <= sll_max)
                     {
                         mb.SendFc6(1, 10, sllselect);
                         actionTextBox.Text += "changing setting limit low =" + sllselect + "\r\n";                        
                     }
                     else
                     {
-                        MessageBox.Show("Selected setting limit low is out of range, Please select again", "Selected setting limit low is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected Setting limit low is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                     sll_change = false;
                 }
                 if (slh_change)
                 {
-                    if ((slhselect/10.0M) >= slh_min && (slhselect/10.0M) <= slh_max)
+                    if ((slhselect/_decimalp) >= slh_min && (slhselect/_decimalp) <= slh_max)
                     {
                         mb.SendFc6(1, 9, slhselect);
                         actionTextBox.Text += "changing setting limit high =" + slhselect + "\r\n";                        
                     }
                     else
                     {
-                        MessageBox.Show("Selected setting limit high is out of range, Please select again", "Selected setting limit high is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected Setting limit high is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                     slh_change = false;
                 }
@@ -1076,11 +1091,12 @@ namespace TM_012P_Setup_Program
                 }
                 if (inl_change || inh_change)
                 {
-                    if (inlselect > inhselect)
+                    if (inlnumud.Value > inhnumud.Value)
                     {
                         inl_change = false;
                         inh_change = false;
-                        MessageBox.Show("Output limit low must not be higher than Output limit high, Please select again", "inl is higher than inh", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Output low limit must be lower than Output high limit, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                 }
                 if (inl_change)
@@ -1092,7 +1108,8 @@ namespace TM_012P_Setup_Program
                     }
                     else
                     {
-                        MessageBox.Show("Selected output limit low is out of range, Please select again", "Selected output limit low is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected Output low limit is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                     inl_change = false;
                 }
@@ -1105,7 +1122,8 @@ namespace TM_012P_Setup_Program
                     }
                     else
                     {
-                        MessageBox.Show("Selected output limit high is out of range, Please select again", "Selected output limit high is out of range", MessageBoxButtons.OK);
+                        MyMsgBox.Showmsg("Selected Output high limit is out of range, Please select again", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _deviceisset = false;
                     }
                     inh_change = false;
                 }
@@ -1119,8 +1137,17 @@ namespace TM_012P_Setup_Program
                 //threadstart();
                 configloadprgbar.Increment(24);
                 Saveuser_config();
-                actionTextBox.AppendText("Done Applying \r\n");
                 configloadprgbar.Increment(1);
+                if(deviceisset != false)
+                {
+                    actionTextBox.AppendText("Done Applying \r\n");
+                    MyMsgBox.Showmsg("Applying device is succeeded", "Done!", MessageBoxButtons.OK, MessageBoxIcon.None);
+                }
+                else
+                {
+                    actionTextBox.AppendText("Failed Applying \r\n");
+                    _deviceisset = true;
+                }
                 configloadprgbar.Value = 0;
                 //sampleThread1.Start();
             }
@@ -1157,9 +1184,10 @@ namespace TM_012P_Setup_Program
             this.inhnumud.ValueChanged += new System.EventHandler(inhnumud_ValueChanged);
         }
 
+        #region Click --> exit, minimize
         private void exitbtn_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure to exit this program?", "Exit TM-012 software setup", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MyMsgBox.Showmsg("Are you sure you want to exit this software?", "Exit!", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.OK)
             {
                 _mbissent = true;
                 Thread.Sleep(200);
@@ -1177,10 +1205,35 @@ namespace TM_012P_Setup_Program
                 WindowState = FormWindowState.Minimized;
             }
         }
-
+        #endregion
         private void deviceBox_Click(object sender, EventArgs e)
         {
             Get_SerialPort();
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void specllb_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //Convert The resource Data into Byte[] 
+
+            byte[] PDF = Properties.Resources.TM_012P_SPEC;
+            MemoryStream ms = new MemoryStream(PDF);
+            //Create PDF File From Binary of resources folders help.pdf
+            FileStream f = new FileStream("TM-012P_SERIES_SPEC.pdf", FileMode.OpenOrCreate);
+            //Write Bytes into Our Created help.pdf
+            ms.WriteTo(f);
+            f.Close();
+            ms.Close();
+            // Finally Show the Created PDF from resources 
+            Process.Start("TM-012P_SERIES_SPEC.pdf");
         }
 
 
@@ -1189,7 +1242,7 @@ private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 {
    if (e.CloseReason == CloseReason.UserClosing)
    {
-       DialogResult result = MessageBox.Show("Are you sure to exit this program?", "Exit TM-012 software setup", MessageBoxButtons.OKCancel);
+       DialogResult result = MyMsgBox.Showmsg("Are you sure to exit this program?", "Exit TM-012 software setup", MessageBoxButtons.OKCancel);
        if (result == DialogResult.Yes)
        {
            Application.Exit();

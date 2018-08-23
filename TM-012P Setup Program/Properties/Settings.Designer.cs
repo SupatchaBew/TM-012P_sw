@@ -73,7 +73,7 @@ namespace TM_012P_Setup_Program.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public decimal pvfil {
             get {
                 return ((decimal)(this["pvfil"]));
@@ -85,7 +85,7 @@ namespace TM_012P_Setup_Program.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("13720")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public decimal slh {
             get {
                 return ((decimal)(this["slh"]));
@@ -97,7 +97,7 @@ namespace TM_012P_Setup_Program.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-2000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public decimal sll {
             get {
                 return ((decimal)(this["sll"]));
@@ -164,6 +164,18 @@ namespace TM_012P_Setup_Program.Properties {
             }
             set {
                 this["defaultset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int model {
+            get {
+                return ((int)(this["model"]));
+            }
+            set {
+                this["model"] = value;
             }
         }
     }

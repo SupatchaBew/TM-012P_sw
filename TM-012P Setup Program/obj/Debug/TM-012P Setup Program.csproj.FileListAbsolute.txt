@@ -21,3 +21,9 @@ C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\De
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\WinFormAnimation.dll
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\WinFormAnimation.xml
 C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.csproj.CopyComplete
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.exe.manifest
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\bin\Debug\TM-012P Setup Program.application
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.exe.manifest
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM-012P Setup Program.application
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM_012P_Setup_Program.MsgBoxYesNo.resources
+C:\Users\COMTAST\source\repos\TM-012P Setup Program\TM-012P Setup Program\obj\Debug\TM_012P_Setup_Program.MsgBoxOK.resources

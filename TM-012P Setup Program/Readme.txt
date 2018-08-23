@@ -7,13 +7,11 @@ This is software for TM-012P device configulation
 Please find to-do lists as below
 - check if value[16] each value equals to 0
 - when connect fail (device timeout, device died, device is not ready to communicate), then it's just die.
-- cancel load config file
 - program icon
-- put current file location in user config
-- nice pop-up warining
 - check language correctiveness
 - when select wrong device serial port
-- load config device with diffent model
+- load config device with different model
+- first time install software, problem with R model check last config
 
 
 Done fixing bug
@@ -40,3 +38,6 @@ Done fixing bug
 
 -July31-
 - popup for out of range
+
+-Aug23-
+- nice pop-up warining
